@@ -18,7 +18,7 @@ import {View, Text} from 'react-native';
 const Goal = ({navigation}) => {
   return (
     <View>
-      <Text>Hello</Text>
+      <Text>Hello!</Text>
     </View>
   );
 };
