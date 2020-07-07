@@ -1,23 +1,16 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 
 import getDateNowDDMMYYY from '../helpers/date.helper';
-import {RotationGestureHandler} from 'react-native-gesture-handler';
 
-const GoalLine = ({dbGoal, navigation}) => {
+const GoalLine = ({goalUnit, navigation}) => {
+  const goalObj = {...goalUnit};
+  console.log('===>>: GoalLine -> goalObj', goalObj);
+
   const handleOnPressButton = () => {
-    console.log('===>>: Press Button');
-    console.log('===>>: handleOnPressButton -> navigation', navigation);
-    navigation.navigate('Goal');
+    navigation.navigate('Goal', {
+      goalUnit: goalUnit,
+    });
   };
 
   const handleOnLongPressButton = () => {
@@ -25,36 +18,25 @@ const GoalLine = ({dbGoal, navigation}) => {
   };
 
   const imgSrc1 = '../assets/iconsPNG/cat_1.png';
-  // const imgSrc1 = `../assets/iconsPNG/${dbGoal.logo}`;
+  // const imgSrc1 = `../assets/iconsPNG/${goalUnit.logo}`;
   // console.log('===>>: GoalLine -> imgSrc1', imgSrc1);
 
   return (
-    // <ScrollView>
     <TouchableOpacity
       onPress={handleOnPressButton}
       onLongPress={handleOnLongPressButton}>
       <View style={styles.goalLineWrapper}>
-        <View style={{...styles.logoAndGoalWrapper, borderColor: dbGoal.color}}>
-          <View style={{...styles.logoWrapper, backgroundColor: dbGoal.color}}>
+        <View
+          style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
+          <View
+            style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
             <Image source={require(imgSrc1)} style={styles.logo} />
           </View>
-          {/* <TextInput
-        style={{
-          height: 35,
-          borderColor: 'gray',
-          borderWidth: 1,
-          flex: 6,
-          marginLeft: 10,
-          padding: '2%',
-        }}
-        defaultValue="You can type in me"
-      /> */}
-          <Text style={styles.goalText}>{dbGoal.goalName}</Text>
+          <Text style={styles.goalText}>{goalUnit.goalName}</Text>
         </View>
         <Text style={styles.date}>{getDateNowDDMMYYY()}</Text>
       </View>
     </TouchableOpacity>
-    // </ScrollView>
   );
 };
 

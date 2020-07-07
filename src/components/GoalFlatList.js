@@ -1,27 +1,23 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TextInput,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
 
-// import getDateNowDDMMYYY from '../helpers/date.helper';
 import GoalLine from './GoalLine';
 
 export default function App({goalsTemp, navigation}) {
-  const goalsTempArr = Object.values(goalsTemp);
+  let goalsTempArr = Object.values(goalsTemp);
+  goalsTempArr = [
+    ...goalsTempArr,
+    ...goalsTempArr,
+    ...goalsTempArr,
+    ...goalsTempArr,
+  ];
 
   return (
     <View style={styles.container}>
       <FlatList
         data={goalsTempArr}
         renderItem={({item}) => (
-          <GoalLine dbGoal={item} navigation={navigation} />
+          <GoalLine goalUnit={item} navigation={navigation} />
         )}
       />
     </View>
@@ -31,7 +27,6 @@ export default function App({goalsTemp, navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
   },
   item: {
     padding: 10,
