@@ -1,14 +1,47 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TextInput} from 'react-native';
+
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const ChildrenGoals = ({goalUnit}) => {
+  const handleOnBlur = () => {
+    console.log('===>>: ChildrenGoals -> handleOnBlur');
+  };
+
   return (
-    <View>
-      <Text>What do I have to achieve it?</Text>
+    <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
+      <Text style={styles.header}>3. What do I need to achieve it?</Text>
+      <TextInput
+        multiline={true}
+        onBlur={handleOnBlur}
+        style={styles.input}
+        value={goalUnit.whyDescription}
+      />
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  wrapper: {
+    display: 'flex',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 10,
+    marginTop: 40,
+  },
+  header: {
+    paddingHorizontal: 8,
+    alignSelf: 'flex-start',
+    position: 'relative',
+    top: -13,
+    left: 20,
+    backgroundColor: Colors.lighter,
+  },
+  input: {
+    paddingHorizontal: 12,
+    fontSize: 18,
+    marginTop: -11,
+  },
+});
 
 export default ChildrenGoals;

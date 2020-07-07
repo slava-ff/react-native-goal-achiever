@@ -14,11 +14,11 @@ const goal = {
   actionsDescription: [
     {
       isDone: 'boolean',
-      actionName: 'string',
+      actionDescription: 'string',
     },
     {
       isDone: 'boolean',
-      actionName: 'string',
+      actionDescription: 'string',
     },
   ],
 };
@@ -41,11 +41,11 @@ const goalsTemp = {
     actionsDescription: [
       {
         isDone: false,
-        actionName: 'Test action 1',
+        actionDescription: 'Test action 1',
       },
       {
-        isDone: 'true',
-        actionName: 'Test action 2',
+        isDone: true,
+        actionDescription: 'Test action 2',
       },
     ],
   },
@@ -66,11 +66,11 @@ const goalsTemp = {
     actionsDescription: [
       {
         isDone: false,
-        actionName: 'Test action 1',
+        actionDescription: 'Test action 1',
       },
       {
-        isDone: 'true',
-        actionName: 'Test action 2',
+        isDone: true,
+        actionDescription: 'Test action 2',
       },
     ],
   },
@@ -91,11 +91,11 @@ const goalsTemp = {
     actionsDescription: [
       {
         isDone: false,
-        actionName: 'Test action 1',
+        actionDescription: 'Test action 1',
       },
       {
-        isDone: 'true',
-        actionName: 'Test action 2',
+        isDone: true,
+        actionDescription: 'Test action 2',
       },
     ],
   },
@@ -116,11 +116,11 @@ const goalsTemp = {
     actionsDescription: [
       {
         isDone: false,
-        actionName: 'Test action 1',
+        actionDescription: 'Test action 1',
       },
       {
-        isDone: 'true',
-        actionName: 'Test action 2',
+        isDone: true,
+        actionDescription: 'Test action 2',
       },
     ],
   },

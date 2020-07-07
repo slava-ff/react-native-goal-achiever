@@ -10,7 +10,7 @@ const WhatDescription = ({goalUnit}) => {
 
   return (
     <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
-      <Text style={styles.header}>What is my main goal?</Text>
+      <Text style={styles.header}>1. What is my main goal?</Text>
       <TextInput
         multiline={true}
         onBlur={handleOnBlur}
@@ -23,6 +23,7 @@ const WhatDescription = ({goalUnit}) => {
 
 const styles = StyleSheet.create({
   wrapper: {
+    display: 'flex',
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 10,
@@ -30,11 +31,11 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 8,
+    alignSelf: 'flex-start',
     position: 'relative',
     top: -13,
     left: 20,
     backgroundColor: Colors.lighter,
-    width: 158,
   },
   input: {
     paddingHorizontal: 12,
