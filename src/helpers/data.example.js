@@ -3,14 +3,17 @@ const goal = {
   goalName: 'string',
   isDone: 'boolean',
   goalLevel: 'number',
-  parentGoal: 'string(id)',
+  parentGoalId: 'string(id)',
   logo: 'string(path || name)',
   date: 'date',
   color: 'string(color name)',
   whatDescription: 'string with br',
   whyDescription: 'string with br',
-  //   haveDescription: ['subGoal-1', 'subGoal-2'], // use childrenGoals
-  childrenGoals: ['id-1', 'id-2'],
+  //   haveDescription: ['subGoal-1', 'subGoal-2'], // use needsDescription
+  needsDescription: {
+    simpleNeeds: [{doHave: 'boolean', needDescription: 'string'}],
+    childrenGoalsIds: ['string || number'],
+  },
   actionsDescription: [
     {
       isDone: 'boolean',
@@ -28,8 +31,7 @@ const goalsTemp = {
     id: 1,
     goalName: 'Some wish 1',
     isDone: false,
-    goalLevel: 1,
-    parentGoal: '',
+    parentGoalId: '',
     logo: 'cat_1.png',
     date: '2020-08-25T00:00:00',
     color: 'cornflowerblue',
@@ -37,7 +39,13 @@ const goalsTemp = {
       'Test what test what test what test what test what test what test what',
     whyDescription:
       'Test why test why test why test why test why test why test why test why',
-    childrenGoals: [],
+    needsDescription: {
+      simpleNeeds: [
+        {doHave: true, needDescription: 'Test need 1'},
+        {doHave: false, needDescription: 'Test need 2'},
+      ],
+      childrenGoalsIds: [],
+    },
     actionsDescription: [
       {
         isDone: false,
@@ -50,11 +58,10 @@ const goalsTemp = {
     ],
   },
   2: {
-    id: 1,
+    id: 2,
     goalName: 'Some wish 2',
     isDone: false,
-    goalLevel: 1,
-    parentGoal: '',
+    parentGoalId: '',
     logo: 'cat_2.png',
     date: '2020-12-17T00:00:00',
     color: 'aquamarine',
@@ -62,7 +69,13 @@ const goalsTemp = {
       'Test what test what test what test what test what test what test what',
     whyDescription:
       'Test why test why test why test why test why test why test why test why',
-    childrenGoals: [],
+    needsDescription: {
+      simpleNeeds: [
+        {doHave: true, needDescription: 'Test need 1'},
+        {doHave: false, needDescription: 'Test need 2'},
+      ],
+      childrenGoalsIds: [],
+    },
     actionsDescription: [
       {
         isDone: false,
@@ -75,11 +88,10 @@ const goalsTemp = {
     ],
   },
   3: {
-    id: 1,
+    id: 3,
     goalName: 'Some wish 3',
     isDone: false,
-    goalLevel: 1,
-    parentGoal: '',
+    parentGoalId: '',
     logo: 'cat_3.png',
     date: '2020-09-04T00:00:00',
     color: 'lightcoral',
@@ -87,7 +99,13 @@ const goalsTemp = {
       'Test what test what test what test what test what test what test what',
     whyDescription:
       'Test why test why test why test why test why test why test why test why',
-    childrenGoals: [],
+    needsDescription: {
+      simpleNeeds: [
+        {doHave: true, needDescription: 'Test need 1'},
+        {doHave: false, needDescription: 'Test need 2'},
+      ],
+      childrenGoalsIds: [],
+    },
     actionsDescription: [
       {
         isDone: false,
@@ -100,11 +118,10 @@ const goalsTemp = {
     ],
   },
   4: {
-    id: 1,
+    id: 4,
     goalName: 'Some wish 4',
     isDone: false,
-    goalLevel: 1,
-    parentGoal: '',
+    parentGoalId: '',
     logo: 'cat_4.png',
     date: '2020-11-15T00:00:00',
     color: 'khaki',
@@ -112,7 +129,13 @@ const goalsTemp = {
       'Test what test what test what test what test what test what test what',
     whyDescription:
       'Test why test why test why test why test why test why test why test why',
-    childrenGoals: [],
+    needsDescription: {
+      simpleNeeds: [
+        {doHave: true, needDescription: 'Test need 1'},
+        {doHave: false, needDescription: 'Test need 2'},
+      ],
+      childrenGoalsIds: [],
+    },
     actionsDescription: [
       {
         isDone: false,

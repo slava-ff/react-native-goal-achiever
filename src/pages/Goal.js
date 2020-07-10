@@ -13,7 +13,7 @@ import {
 import Title from '../components/Title';
 import WhatDescription from '../components/WhatDescription';
 import WhyDescription from '../components/WhyDescription';
-import ChildrenGoals from '../components/ChildrenGoals';
+import NeedsDescription from '../components/NeedsDescription';
 import ActionsDescription from '../components/ActionsDescription';
 
 const Goal = ({route, navigation}) => {
@@ -26,7 +26,7 @@ const Goal = ({route, navigation}) => {
       <Title goalUnit={goalUnit} />
       <WhatDescription goalUnit={goalUnit} />
       <WhyDescription goalUnit={goalUnit} />
-      <ChildrenGoals goalUnit={goalUnit} />
+      <NeedsDescription goalUnit={goalUnit} />
       <ActionsDescription goalUnit={goalUnit} />
     </ScrollView>
   );

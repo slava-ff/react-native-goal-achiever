@@ -3,9 +3,9 @@ import {StyleSheet, View, Text, TextInput} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-const ChildrenGoals = ({goalUnit}) => {
+const NeedsDescription = ({goalUnit}) => {
   const handleOnBlur = () => {
-    console.log('===>>: ChildrenGoals -> handleOnBlur');
+    console.log('===>>: NeedsDescription -> handleOnBlur');
   };
 
   return (
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChildrenGoals;
+export default NeedsDescription;
