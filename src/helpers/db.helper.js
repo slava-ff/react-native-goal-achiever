@@ -36,22 +36,21 @@ const deleteChildrenGoalsAndThenItself = goal => {
 
       deleteChildrenGoalsAndThenItself(childGoal);
     });
-  } else {
-    // delete itself
-    const numberRemoved = db.remove({_id: goal._id}, {}, function(
-      err,
-      numRemoved,
-    ) {
-      if (err) {
-        return errorHelper('db.delete.deleteChildrenGoals.remove', err);
-      }
-
-      return numRemoved;
-    });
-
-    if (numberRemoved !== 1) {
-      return errorHelper('db.delete.deleteChildrenGoals.numberRemoved!==1');
+  }
+  // delete itself
+  const numberRemoved = db.remove({_id: goal._id}, {}, function(
+    err,
+    numRemoved,
+  ) {
+    if (err) {
+      return errorHelper('db.delete.deleteChildrenGoals.remove', err);
     }
+
+    return numRemoved;
+  });
+
+  if (numberRemoved !== 1) {
+    return errorHelper('db.delete.deleteChildrenGoals.numberRemoved!==1');
   }
 };
 
@@ -177,5 +176,23 @@ export default {
 
     // delete all its children goals and their children goals and etc... and then itself
     return deleteChildrenGoalsAndThenItself(goal);
+  },
+
+  getNewSchema() {
+    return {
+      goalName: '',
+      isDone: false,
+      parentGoalId: '',
+      logo: '',
+      date: '',
+      color: 'blue',
+      whatDescription: '',
+      whyDescription: '',
+      needsDescription: {
+        simpleNeeds: [],
+        childrenGoalsIds: [],
+      },
+      actionsDescription: [],
+    };
   },
 };

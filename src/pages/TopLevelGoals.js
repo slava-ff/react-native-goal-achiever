@@ -13,9 +13,12 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 // import GoalLine from '../components/GoalLine';
 import GoalFlatList from '../components/GoalFlatList';
 import AddButton from '../components/AddButton';
+import DB from '../helpers/db.helper';
 import goalsTemp from '../helpers/data.example';
 
 const TopLevelGoals = ({navigation}) => {
+  const goals = DB.getAllTopLevel();
+
   return (
     <>
       {/* <View style={{position: 'relative'}}> */}
@@ -60,12 +63,14 @@ const TopLevelGoals = ({navigation}) => {
           <Text>Aasasdasdasdsd</Text>
         </View>
       </ScrollView> */}
-      <GoalFlatList
-        goalsTemp={goalsTemp}
-        navigation={navigation}
-        style={styles.flatList}
-      />
-      <AddButton style={styles.btn} />
+      {goals && (
+        <GoalFlatList
+          goalsTemp={goals}
+          navigation={navigation}
+          style={styles.flatList}
+        />
+      )}
+      <AddButton style={styles.btn} navigation={navigation} />
       {/* </View> */}
     </>
   );

@@ -1,9 +1,15 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 
-const AddButton = () => {
+import DB from '../helpers/db.helper';
+
+const AddButton = ({navigation}) => {
+  const newGoal = DB.getNewSchema();
+
   const handleOnPressButton = () => {
-    console.log('====> add button click!');
+    navigation.navigate('Goal', {
+      goalUnit: newGoal,
+    });
   };
 
   return (

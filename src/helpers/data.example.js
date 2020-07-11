@@ -2,24 +2,21 @@ const goal = {
   id: 'string || number',
   goalName: 'string',
   isDone: 'boolean',
-  goalLevel: 'number',
   parentGoalId: 'string(id)',
   logo: 'string(path || name)',
   date: 'date',
   color: 'string(color name)',
   whatDescription: 'string with br',
   whyDescription: 'string with br',
-  //   haveDescription: ['subGoal-1', 'subGoal-2'], // use needsDescription
   needsDescription: {
-    simpleNeeds: [{doHave: 'boolean', needDescription: 'string'}],
+    simpleNeeds: [
+      {needId: 'uuid', doHave: 'boolean', needDescription: 'string'},
+    ],
     childrenGoalsIds: ['string || number'],
   },
   actionsDescription: [
     {
-      isDone: 'boolean',
-      actionDescription: 'string',
-    },
-    {
+      actionId: 'uuid',
       isDone: 'boolean',
       actionDescription: 'string',
     },
@@ -28,7 +25,6 @@ const goal = {
 
 const goalsTemp = {
   1: {
-    id: 1,
     goalName: 'Some wish 1',
     isDone: false,
     parentGoalId: '',
@@ -58,7 +54,6 @@ const goalsTemp = {
     ],
   },
   2: {
-    id: 2,
     goalName: 'Some wish 2',
     isDone: false,
     parentGoalId: '',
@@ -88,7 +83,6 @@ const goalsTemp = {
     ],
   },
   3: {
-    id: 3,
     goalName: 'Some wish 3',
     isDone: false,
     parentGoalId: '',
@@ -118,7 +112,6 @@ const goalsTemp = {
     ],
   },
   4: {
-    id: 4,
     goalName: 'Some wish 4',
     isDone: false,
     parentGoalId: '',

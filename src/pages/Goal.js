@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,7 +17,11 @@ import NeedsDescription from '../components/NeedsDescription';
 import ActionsDescription from '../components/ActionsDescription';
 
 const Goal = ({route, navigation}) => {
-  const {goalUnit} = route.params;
+  const [goalUnit, setGoalUnit] = useState(route.params.goalUnit);
+
+  const handleGoalChange = changedGoal => {
+    setGoalUnit(changedGoal);
+  };
 
   return (
     <ScrollView
@@ -27,7 +31,10 @@ const Goal = ({route, navigation}) => {
       <WhatDescription goalUnit={goalUnit} />
       <WhyDescription goalUnit={goalUnit} />
       <NeedsDescription goalUnit={goalUnit} />
-      <ActionsDescription goalUnit={goalUnit} />
+      <ActionsDescription
+        goalUnit={goalUnit}
+        handleGoalChange={handleGoalChange}
+      />
     </ScrollView>
   );
 };
