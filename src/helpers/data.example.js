@@ -18,7 +18,7 @@ const goal = {
     {
       actionId: 'uuid',
       isDone: 'boolean',
-      actionDescription: 'string',
+      actionText: 'string',
     },
   ],
 };
@@ -45,11 +45,11 @@ const goalsTemp = {
     actionsDescription: [
       {
         isDone: false,
-        actionDescription: 'Test action 1',
+        actionText: 'Test action 1',
       },
       {
         isDone: true,
-        actionDescription: 'Test action 2',
+        actionText: 'Test action 2',
       },
     ],
   },
@@ -74,11 +74,11 @@ const goalsTemp = {
     actionsDescription: [
       {
         isDone: false,
-        actionDescription: 'Test action 1',
+        actionText: 'Test action 1',
       },
       {
         isDone: true,
-        actionDescription: 'Test action 2',
+        actionText: 'Test action 2',
       },
     ],
   },
@@ -103,11 +103,11 @@ const goalsTemp = {
     actionsDescription: [
       {
         isDone: false,
-        actionDescription: 'Test action 1',
+        actionText: 'Test action 1',
       },
       {
         isDone: true,
-        actionDescription: 'Test action 2',
+        actionText: 'Test action 2',
       },
     ],
   },
@@ -132,11 +132,11 @@ const goalsTemp = {
     actionsDescription: [
       {
         isDone: false,
-        actionDescription: 'Test action 1',
+        actionText: 'Test action 1',
       },
       {
         isDone: true,
-        actionDescription: 'Test action 2',
+        actionText: 'Test action 2',
       },
     ],
   },

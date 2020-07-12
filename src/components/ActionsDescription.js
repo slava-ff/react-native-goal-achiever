@@ -13,12 +13,25 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
 const ActionsDescription = ({goalUnit, handleGoalChange}) => {
-  const handleOnBlur = () => {
-    console.log('===>>: ActionsDescription -> handleOnBlur');
+  const handleOnSubmitText = (text, actionIdToChange) => {
+    const changedGoal = {...goalUnit};
+
+    const indexToChange = changedGoal.actionsDescription.findIndex(
+      action => action.actionId === actionIdToChange,
+    );
+
+    changedGoal.actionsDescription[indexToChange].actionText = text;
+    handleGoalChange(changedGoal);
   };
 
-  const handleDeleteItem = e => {
-    console.log('===>>: handleDeleteItem -> smth', e);
+  const handleDeleteItem = idToDelete => {
+    const changedGoal = {...goalUnit};
+    const indexToDelete = changedGoal.actionsDescription.findIndex(
+      action => action.actionId === idToDelete,
+    );
+
+    changedGoal.actionsDescription.splice(indexToDelete, 1);
+    handleGoalChange(changedGoal);
   };
 
   const handleAddItem = () => {
@@ -28,15 +41,12 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
     changedGoal.actionsDescription.push({
       actionId: newId,
       isDone: false,
-      actionDescription: '',
+      actionText: '',
     });
-
     handleGoalChange(changedGoal);
   };
 
   const Actions = () => {
-    // const [toggleCheckBox, setToggleCheckBox] = useState(action.isDone);
-
     return goalUnit.actionsDescription.map(action => (
       <View key={action.actionId} style={styles.checkboxContainer}>
         <CheckBox
@@ -50,8 +60,15 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
             textDecorationLine: action.isDone ? 'line-through' : 'none',
           }}
           multiline={true}
-          defaultValue={action.actionDescription}
+          defaultValue={action.actionText}
           placeholder={'Type here...'}
+          blurOnSubmit={true}
+          onSubmitEditing={event =>
+            handleOnSubmitText(event.nativeEvent.text, action.actionId)
+          }
+          onEndEditing={event =>
+            handleOnSubmitText(event.nativeEvent.text, action.actionId)
+          }
         />
         <TouchableWithoutFeedback
           nativeID={action.actionId}
@@ -111,14 +128,14 @@ const styles = StyleSheet.create({
     // top: 8,
   },
   itemText: {
-    paddingHorizontal: 8,
+    paddingLeft: 8,
     fontSize: 18,
     width: '80%',
-    borderWidth: 1,
+    // borderWidth: 1,
     padding: 2,
   },
   delete: {
-    borderWidth: 1,
+    // borderWidth: 1,
     fontSize: 23,
     color: 'gray',
     fontWeight: 'bold',
