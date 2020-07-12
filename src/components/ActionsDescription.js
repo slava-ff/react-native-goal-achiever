@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
@@ -96,7 +96,7 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
     <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
       <Text style={styles.header}>4. What actions to take to achieve it?</Text>
       <Actions />
-      <AddItem whatAdd={'action'} />
+      <AddItem />
     </View>
   );
 };

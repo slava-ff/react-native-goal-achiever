@@ -4,11 +4,11 @@ import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import DB from '../helpers/db.helper';
 
 const AddButton = ({navigation}) => {
-  const newGoal = DB.getNewSchema();
-
   const handleOnPressButton = () => {
+    const goalSchema = DB.getNewSchema();
+
     navigation.navigate('Goal', {
-      goalUnit: newGoal,
+      goalUnit: goalSchema,
     });
   };
 

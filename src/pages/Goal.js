@@ -27,10 +27,16 @@ const Goal = ({route, navigation}) => {
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
       style={styles.goalMainWrapper}>
-      <Title goalUnit={goalUnit} />
-      <WhatDescription goalUnit={goalUnit} />
-      <WhyDescription goalUnit={goalUnit} />
-      <NeedsDescription goalUnit={goalUnit} />
+      <Title goalUnit={goalUnit} handleGoalChange={handleGoalChange} />
+      <WhatDescription
+        goalUnit={goalUnit}
+        handleGoalChange={handleGoalChange}
+      />
+      <WhyDescription goalUnit={goalUnit} handleGoalChange={handleGoalChange} />
+      <NeedsDescription
+        goalUnit={goalUnit}
+        handleGoalChange={handleGoalChange}
+      />
       <ActionsDescription
         goalUnit={goalUnit}
         handleGoalChange={handleGoalChange}

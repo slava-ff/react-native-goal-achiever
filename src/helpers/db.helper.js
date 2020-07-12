@@ -179,7 +179,7 @@ export default {
   },
 
   getNewSchema() {
-    return {
+    const schema = {
       goalName: '',
       isDone: false,
       parentGoalId: '',
@@ -194,5 +194,7 @@ export default {
       },
       actionsDescription: [],
     };
+
+    return {...schema};
   },
 };

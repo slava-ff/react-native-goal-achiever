@@ -3,9 +3,11 @@ import {StyleSheet, View, Text, TextInput} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-const WhyDescription = ({goalUnit}) => {
-  const handleOnBlur = () => {
-    console.log('===>>: WhyDescription -> handleOnBlur');
+const WhyDescription = ({goalUnit, handleGoalChange}) => {
+  const handleOnSubmitText = text => {
+    goalUnit.whyDescription = text;
+
+    handleGoalChange(goalUnit);
   };
 
   return (
@@ -13,9 +15,14 @@ const WhyDescription = ({goalUnit}) => {
       <Text style={styles.header}>2. Why do I want it?</Text>
       <TextInput
         multiline={true}
-        onBlur={handleOnBlur}
+        placeholder={'Type here...'}
+        blurOnSubmit={true}
         style={styles.input}
-        value={goalUnit.whyDescription}
+        defaultValue={goalUnit.whyDescription}
+        onSubmitEditing={event =>
+          handleOnSubmitText(event.nativeEvent.TextInput)
+        }
+        onEndEditing={event => handleOnSubmitText(event.nativeEvent.text)}
       />
     </View>
   );

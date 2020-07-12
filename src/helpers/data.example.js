@@ -9,9 +9,7 @@ const goal = {
   whatDescription: 'string with br',
   whyDescription: 'string with br',
   needsDescription: {
-    simpleNeeds: [
-      {needId: 'uuid', doHave: 'boolean', needDescription: 'string'},
-    ],
+    simpleNeeds: [{needId: 'uuid', doHave: 'boolean', needText: 'string'}],
     childrenGoalsIds: ['string || number'],
   },
   actionsDescription: [

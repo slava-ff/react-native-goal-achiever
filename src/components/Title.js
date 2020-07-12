@@ -3,13 +3,27 @@ import {StyleSheet, View, Image, TextInput} from 'react-native';
 
 const imgSrc1 = '../assets/iconsPNG/cat_1.png';
 
-const Title = ({goalUnit}) => {
+const Title = ({goalUnit, handleGoalChange}) => {
+  const handleOnSubmitText = text => {
+    goalUnit.goalName = text;
+
+    handleGoalChange(goalUnit);
+  };
   return (
     <View style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
       <View style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
         <Image source={require(imgSrc1)} style={styles.logo} />
       </View>
-      <TextInput style={styles.goalName} value={goalUnit.goalName} />
+      <TextInput
+        style={styles.goalName}
+        defaultValue={goalUnit.goalName}
+        placeholder={'Type here...'}
+        blurOnSubmit={true}
+        onSubmitEditing={event =>
+          handleOnSubmitText(event.nativeEvent.TextInput)
+        }
+        onEndEditing={event => handleOnSubmitText(event.nativeEvent.text)}
+      />
       <View style={styles.freeSpace} />
     </View>
   );
