@@ -1,32 +1,57 @@
-import React from 'react';
-// import {
-//   SafeAreaView,
-//   StyleSheet,
-//   ScrollView,
-//   View,
-//   Text,
-//   StatusBar,
-// } from 'react-native';
+import React, {useState} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  StatusBar,
+  Image,
+  TextInput,
+} from 'react-native';
 
-// import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Title from '../components/Title';
+import WhatDescription from '../components/WhatDescription';
+import WhyDescription from '../components/WhyDescription';
+import NeedsDescription from '../components/NeedsDescription';
+import ActionsDescription from '../components/ActionsDescription';
 
-// import GoalLine from '../components/GoalLine';
-import GoalFlatList from '../components/GoalFlatList';
-import goalsTemp from '../helpers/data.example';
-import {View, Text} from 'react-native';
+const Goal = ({route, navigation}) => {
+  const [goalUnit, setGoalUnit] = useState(route.params.goalUnit);
 
-const Goal = ({navigation}) => {
+  const handleGoalChange = changedGoal => {
+    setGoalUnit(changedGoal);
+  };
+
   return (
-    <View>
-      <Text>Hello!</Text>
-    </View>
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      style={styles.goalMainWrapper}>
+      <Title goalUnit={goalUnit} handleGoalChange={handleGoalChange} />
+      <WhatDescription
+        goalUnit={goalUnit}
+        handleGoalChange={handleGoalChange}
+      />
+      <WhyDescription goalUnit={goalUnit} handleGoalChange={handleGoalChange} />
+      <NeedsDescription
+        goalUnit={goalUnit}
+        handleGoalChange={handleGoalChange}
+      />
+      <ActionsDescription
+        goalUnit={goalUnit}
+        handleGoalChange={handleGoalChange}
+      />
+    </ScrollView>
   );
 };
 
-// const styles = StyleSheet.create({
-//   scrollView: {
-//     backgroundColor: Colors.lighter,
-//   },
-// });
+const styles = StyleSheet.create({
+  goalMainWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingHorizontal: 10,
+    marginTop: '3%',
+  },
+});
 
 export default Goal;
