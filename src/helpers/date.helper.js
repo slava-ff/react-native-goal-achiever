@@ -1,5 +1,12 @@
-const getDateNowDDMMYYY = () => {
-  const date = new Date();
+const getDateDDMMYYY = dateProp => {
+  let date;
+
+  if (dateProp) {
+    date = new Date(dateProp);
+  } else {
+    date = new Date();
+  }
+
   const months = [
     'Jan',
     'Feb',
@@ -24,4 +31,4 @@ const getDateNowDDMMYYY = () => {
   return myDate;
 };
 
-export default getDateNowDDMMYYY;
+export default getDateDDMMYYY;

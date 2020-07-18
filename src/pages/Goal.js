@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, ScrollView, View, Alert, BackHandler} from 'react-native';
 
 import Title from '../components/Title';
@@ -6,6 +6,8 @@ import WhatDescription from '../components/WhatDescription';
 import WhyDescription from '../components/WhyDescription';
 import NeedsDescription from '../components/NeedsDescription';
 import ActionsDescription from '../components/ActionsDescription';
+import DatePicker from '../components/DatePicker';
+
 import DB from '../helpers/db.helper';
 
 const Goal = ({route, navigation}) => {
@@ -84,6 +86,7 @@ const Goal = ({route, navigation}) => {
           goalUnit={goalUnit}
           handleGoalChange={handleGoalChange}
         />
+        <DatePicker goalUnit={goalUnit} handleGoalChange={handleGoalChange} />
       </ScrollView>
     </View>
   );

@@ -51,7 +51,7 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
       <View key={need.needId} style={styles.checkboxContainer}>
         <CheckBox
           value={need.doHave}
-          onValueChange={console.log('checkbox')}
+          onValueChange={value => console.log('checkbox: ', value)}
           style={styles.checkbox}
         />
         <TextInput
