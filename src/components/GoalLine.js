@@ -4,9 +4,6 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import getDateNowDDMMYYY from '../helpers/date.helper';
 
 const GoalLine = ({goalUnit, navigation}) => {
-  const goalObj = {...goalUnit};
-  console.log('===>>: GoalLine -> goalObj', goalObj);
-
   const handleOnPressButton = () => {
     navigation.navigate('Goal', {
       goalUnit: goalUnit,

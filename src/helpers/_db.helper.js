@@ -1,5 +1,15 @@
-import PouchDB from 'pouchdb-react-native';
-const db = new PouchDB('mydb');
+import Datastore from 'react-native-local-mongodb';
+import AsyncStorage from '@react-native-community/async-storage';
+
+// const db = new Datastore({
+//   filename: 'asyncStorageKey',
+//   storage: AsyncStorage,
+// });
+const db = new Datastore({
+  filename: 'asyncStorageKey1',
+  inMemoryOnly: true,
+  autoload: true,
+});
 
 const errorHelper = (text, err) => {
   if (err) {
@@ -56,8 +66,7 @@ const deleteChildrenGoalsAndThenItself = goal => {
 
 export default {
   async getAll() {
-    const allDocs = await db.allDocs();
-    return allDocs.rows.map(doc => doc.doc);
+    return await db.findAsync({});
   },
 
   async saveGoal(goal) {
@@ -68,25 +77,25 @@ export default {
     //   return newDoc;
     // });
 
-    return await db.post(goal);
+    const newGoal = await db.insertAsync(goal);
 
-    // if (!goal.parentGoalId) {
-    //   console.log('===>>: DB 2-1');
-    //   return newGoal;
-    // } else {
-    //   console.log('===>>: DB 2-2');
-    //   const updatedGoal = await db.updateAsync(
-    //     {_id: goal.parentGoalId},
-    //     {$push: {'needsDescription.childrenGoalsIds': newGoal._id}},
-    //     {},
-    //   );
+    if (!goal.parentGoalId) {
+      console.log('===>>: DB 2-1');
+      return newGoal;
+    } else {
+      console.log('===>>: DB 2-2');
+      const updatedGoal = await db.updateAsync(
+        {_id: goal.parentGoalId},
+        {$push: {'needsDescription.childrenGoalsIds': newGoal._id}},
+        {},
+      );
 
-    //   if (updatedGoal) {
-    //     return newGoal;
-    //   } else {
-    //     return errorHelper('db.saveNestedGoal.return');
-    //   }
-    // }
+      if (updatedGoal) {
+        return newGoal;
+      } else {
+        return errorHelper('db.saveNestedGoal.return');
+      }
+    }
   },
 
   // saveNestedGoal(goal) {

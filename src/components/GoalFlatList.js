@@ -4,18 +4,13 @@ import {View, FlatList, StyleSheet} from 'react-native';
 import GoalLine from './GoalLine';
 
 export default function App({goalsTemp, navigation}) {
-  let goalsTempArr = Object.values(goalsTemp);
-  goalsTempArr = [
-    ...goalsTempArr,
-    ...goalsTempArr,
-    ...goalsTempArr,
-    ...goalsTempArr,
-  ];
+  const goalsTempArr = Object.values(goalsTemp);
 
   return (
     <View style={styles.container}>
       <FlatList
         data={goalsTempArr}
+        keyExtractor={item => item._id}
         renderItem={({item}) => (
           <GoalLine goalUnit={item} navigation={navigation} />
         )}

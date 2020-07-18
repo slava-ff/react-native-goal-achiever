@@ -1,68 +1,25 @@
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
-// import GoalLine from '../components/GoalLine';
 import GoalFlatList from '../components/GoalFlatList';
 import AddButton from '../components/AddButton';
 import DB from '../helpers/db.helper';
-import goalsTemp from '../helpers/data.example';
 
 const TopLevelGoals = ({navigation}) => {
-  const goals = DB.getAllTopLevel();
+  const [goals, setGoals] = useState([]);
+
+  const getAllGoalsFromDb = async () => {
+    const goalsFromDb = await DB.getAll();
+
+    setGoals(goalsFromDb);
+
+    return goalsFromDb;
+  };
+
+  getAllGoalsFromDb();
 
   return (
     <>
-      {/* <View style={{position: 'relative'}}> */}
-      {/* <StatusBar barStyle="dark-content" /> */}
-      {/* <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.scrollView}>
-        <View
-          style={{
-            borderColor: 'black',
-            margin: 30,
-            borderWidth: 2,
-            height: 140,
-          }}>
-          <Text>Aasasdasdasdsd</Text>
-        </View>
-        <View
-          style={{
-            borderColor: 'black',
-            margin: 30,
-            borderWidth: 2,
-            height: 140,
-          }}>
-          <Text>Aasasdasdasdsd</Text>
-        </View>
-        <View
-          style={{
-            borderColor: 'black',
-            margin: 30,
-            borderWidth: 2,
-            height: 140,
-          }}>
-          <Text>Aasasdasdasdsd</Text>
-        </View>
-        <View
-          style={{
-            borderColor: 'black',
-            margin: 30,
-            borderWidth: 2,
-            height: 140,
-          }}>
-          <Text>Aasasdasdasdsd</Text>
-        </View>
-      </ScrollView> */}
       {goals && (
         <GoalFlatList
           goalsTemp={goals}
@@ -71,15 +28,11 @@ const TopLevelGoals = ({navigation}) => {
         />
       )}
       <AddButton style={styles.btn} navigation={navigation} />
-      {/* </View> */}
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  // scrollView: {
-  //   backgroundColor: Colors.lighter,
-  // },
   flatList: {},
   btn: {},
 });
