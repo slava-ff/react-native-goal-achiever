@@ -14,17 +14,16 @@ import guidGenerator from '../helpers/guid.helper';
 
 const ActionsDescription = ({goalUnit, handleGoalChange}) => {
   const handleOnSubmitText = (text, actionIdToChange) => {
-    const changedGoal = {...goalUnit};
-
-    const indexToChange = changedGoal.actionsDescription.findIndex(
+    const indexToChange = goalUnit.actionsDescription.findIndex(
       action => action.actionId === actionIdToChange,
     );
 
-    changedGoal.actionsDescription[indexToChange].actionText = text;
-    handleGoalChange(changedGoal);
+    goalUnit.actionsDescription[indexToChange].actionText = text;
+    handleGoalChange(goalUnit);
   };
 
   const handleDeleteItem = idToDelete => {
+    // if leave only goalUnit - not live updating but onBack - sees changes
     const changedGoal = {...goalUnit};
     const indexToDelete = changedGoal.actionsDescription.findIndex(
       action => action.actionId === idToDelete,
@@ -84,7 +83,7 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
   const AddItem = () => {
     return (
       <TouchableWithoutFeedback onPress={handleAddItem}>
-        <View style={styles.checkboxContainer}>
+        <View style={styles.addItemWrapper}>
           <Text style={styles.plus}>+</Text>
           <Text style={styles.addItemText}>New action</Text>
         </View>
@@ -125,22 +124,26 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     position: 'relative',
-    // top: 8,
   },
   itemText: {
     paddingLeft: 8,
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
     width: '80%',
-    // borderWidth: 1,
     padding: 2,
   },
   delete: {
-    // borderWidth: 1,
     fontSize: 23,
     color: 'gray',
     fontWeight: 'bold',
     marginLeft: 10,
     transform: [{rotate: '45deg'}],
+  },
+  addItemWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginTop: 5,
   },
   plus: {
     position: 'relative',
@@ -153,6 +156,7 @@ const styles = StyleSheet.create({
   addItemText: {
     paddingHorizontal: 8,
     fontSize: 16,
+    color: 'gray',
     marginLeft: 11,
   },
 });

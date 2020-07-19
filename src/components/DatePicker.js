@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Button, Platform} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Platform,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import getDateDDMMYYY from '../helpers/date.helper';
@@ -29,13 +36,14 @@ export default ({goalUnit, handleGoalChange}) => {
   return (
     <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
       <Text style={styles.header}>5. When it should be achieved?</Text>
-      {/* <Text style={styles.input}>{goalUnit.date || '18 aug 2020'}</Text> */}
       <View>
-        <Button
-          style={styles.button}
-          onPress={showDatepicker}
-          title={dateText}
-        />
+        <TouchableOpacity style={styles.dateWrapper} onPress={showDatepicker}>
+          <Image
+            source={require('../assets/iconsPNG/icon-date.png')}
+            style={styles.image}
+          />
+          <Text style={styles.date}>{dateText}</Text>
+        </TouchableOpacity>
       </View>
       {show && (
         <DateTimePicker
@@ -55,6 +63,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 10,
     marginTop: 40,
+    marginBottom: 100,
     display: 'flex',
   },
   header: {
@@ -65,9 +74,23 @@ const styles = StyleSheet.create({
     left: 20,
     backgroundColor: Colors.lighter,
   },
-  button: {
+  dateWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  image: {
+    width: 20,
+    height: 20,
+    top: 1,
+  },
+  date: {
     paddingHorizontal: 12,
     fontSize: 18,
-    marginTop: -11,
+    fontWeight: 'bold',
+    marginTop: 0,
+    marginLeft: 2,
+    marginBottom: 12,
+    textAlign: 'center',
   },
 });

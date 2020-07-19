@@ -31,10 +31,10 @@ const Title = ({goalUnit, handleGoalChange}) => {
 
 const styles = StyleSheet.create({
   logoAndGoalWrapper: {
-    // height: '150%',
     display: 'flex',
     flexDirection: 'row',
     flex: 7,
+    marginTop: 10,
   },
   freeSpace: {
     flex: 1,

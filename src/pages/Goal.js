@@ -33,6 +33,7 @@ const Goal = ({route, navigation}) => {
     };
 
     const backAction = () => {
+      // need to unfocus all elements
       if (defaultGoal !== JSON.stringify(goalUnit)) {
         Alert.alert(
           'Unsaved changes',
@@ -65,7 +66,7 @@ const Goal = ({route, navigation}) => {
   }, [defaultGoal, goalUnit, navigation]);
 
   return (
-    <View style={styles.container}>
+    <View>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.goalMainWrapper}>
@@ -93,17 +94,10 @@ const Goal = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  // container: {
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   height: '100%',
-  // },
   goalMainWrapper: {
     display: 'flex',
     flexDirection: 'column',
     paddingHorizontal: 10,
-    marginTop: '3%',
-    marginBottom: '5%',
   },
   buttons: {position: 'absolute', bottom: 10},
 });

@@ -46,8 +46,9 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingHorizontal: 12,
-    fontSize: 18,
-    marginTop: -11,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: -15,
   },
 });
 
