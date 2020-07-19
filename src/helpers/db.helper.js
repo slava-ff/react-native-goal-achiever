@@ -152,29 +152,30 @@ export default {
     });
   },
 
-  delete(goal) {
-    // delete from parent goal
-    if (goal.parentGoalId) {
-      const updatedParentGoal = db.update(
-        {_id: goal.parentGoalId},
-        {$pull: {'needsDescription.childrenGoalsIds': goal._id}},
-        {},
-        function(err, doc) {
-          if (err) {
-            return errorHelper('db.delete.updatedParentGoal', err);
-          }
+  async delete(goal) {
+    return await db.remove(goal);
+    // // delete from parent goal
+    // if (goal.parentGoalId) {
+    //   const updatedParentGoal = db.update(
+    //     {_id: goal.parentGoalId},
+    //     {$pull: {'needsDescription.childrenGoalsIds': goal._id}},
+    //     {},
+    //     function(err, doc) {
+    //       if (err) {
+    //         return errorHelper('db.delete.updatedParentGoal', err);
+    //       }
 
-          return doc;
-        },
-      );
+    //       return doc;
+    //     },
+    //   );
 
-      if (!updatedParentGoal) {
-        return errorHelper('db.delete.!updatedParentGoal');
-      }
-    }
+    //   if (!updatedParentGoal) {
+    //     return errorHelper('db.delete.!updatedParentGoal');
+    //   }
+    // }
 
-    // delete all its children goals and their children goals and etc... and then itself
-    return deleteChildrenGoalsAndThenItself(goal);
+    // // delete all its children goals and their children goals and etc... and then itself
+    // return deleteChildrenGoalsAndThenItself(goal);
   },
 
   async deleteAll() {

@@ -1,5 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, ScrollView, View, Alert, BackHandler} from 'react-native';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Alert,
+  BackHandler,
+  Button,
+} from 'react-native';
 
 import Title from '../components/Title';
 import WhatDescription from '../components/WhatDescription';
@@ -14,6 +21,36 @@ const Goal = ({route, navigation}) => {
   const defaultGoal = JSON.stringify(route.params.goalUnit);
   console.log('===>>: Goal -> defaultGoal', defaultGoal);
   const [goalUnit, setGoalUnit] = useState(route.params.goalUnit);
+
+  useLayoutEffect(() => {
+    const deleteAction = goal => {
+      Alert.alert('Delete', 'Are you sure you want to delete this goal?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: async () => {
+            await DB.delete(goal);
+            navigation.goBack();
+          },
+          style: 'destructive',
+        },
+      ]);
+    };
+
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          onPress={() => deleteAction(goalUnit)}
+          title="Del"
+          style={styles.deleteBtn}
+        />
+      ),
+    });
+  }, [goalUnit, navigation]);
 
   const handleGoalChange = changedGoal => {
     // const newGoal = {...changedGoal};
@@ -101,6 +138,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   buttons: {position: 'absolute', bottom: 10},
+  deleteBtn: {position: 'absolute', right: 100},
 });
 
 export default Goal;

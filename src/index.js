@@ -22,15 +22,15 @@ const App = () => {
           name="Goal"
           options={{
             title: 'Goal',
-            headerRight: () => (
-              <Button
-                onPress={() => alert('This is a Delete button!')}
-                title="Del"
-                color="gray"
-                // eslint-disable-next-line react-native/no-inline-styles
-                style={{padding: 10}}
-              />
-            ),
+            // headerRight: () => (
+            //   <Button
+            //     onPress={val1 => console.log('val1:', val1)}
+            //     title="Del"
+            //     color="gray"
+            //     // eslint-disable-next-line react-native/no-inline-styles
+            //     style={{padding: 10}}
+            //   />
+            // ),
           }}
           component={Goal}
         />

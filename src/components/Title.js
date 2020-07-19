@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   logoWrapper: {
-    flex: 1,
     backgroundColor: 'gray',
     borderRadius: 50,
     height: 70,
