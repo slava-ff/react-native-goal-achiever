@@ -12,9 +12,11 @@ import DB from '../helpers/db.helper';
 
 const Goal = ({route, navigation}) => {
   const defaultGoal = JSON.stringify(route.params.goalUnit);
+  console.log('===>>: Goal -> defaultGoal', defaultGoal);
   const [goalUnit, setGoalUnit] = useState(route.params.goalUnit);
 
   const handleGoalChange = changedGoal => {
+    // const newGoal = {...changedGoal};
     setGoalUnit(changedGoal);
   };
 
@@ -33,7 +35,6 @@ const Goal = ({route, navigation}) => {
     };
 
     const backAction = () => {
-      // need to unfocus all elements
       if (defaultGoal !== JSON.stringify(goalUnit)) {
         Alert.alert(
           'Unsaved changes',

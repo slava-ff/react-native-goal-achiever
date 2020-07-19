@@ -1,14 +1,29 @@
-import React from 'react';
-import {StyleSheet, View, Image, TextInput} from 'react-native';
+import React, {useRef, useEffect} from 'react';
+import {StyleSheet, View, Image, TextInput, Keyboard} from 'react-native';
 
 const imgSrc1 = '../assets/iconsPNG/cat_1.png';
 
 const Title = ({goalUnit, handleGoalChange}) => {
+  const myInput = useRef();
+
   const handleOnSubmitText = text => {
     goalUnit.goalName = text;
 
     handleGoalChange(goalUnit);
   };
+
+  const _keyboardDidHide = () => {
+    myInput.current && myInput.current.blur();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
+
   return (
     <View style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
       <View style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
@@ -23,6 +38,7 @@ const Title = ({goalUnit, handleGoalChange}) => {
           handleOnSubmitText(event.nativeEvent.TextInput)
         }
         onEndEditing={event => handleOnSubmitText(event.nativeEvent.text)}
+        ref={myInput}
       />
       <View style={styles.freeSpace} />
     </View>

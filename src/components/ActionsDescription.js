@@ -1,11 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -13,6 +14,27 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
 const ActionsDescription = ({goalUnit, handleGoalChange}) => {
+  // console.log('===>>: ActionsDescription -> goalUnit', goalUnit);
+  const myInput = useRef();
+
+  const handleCheckboxToggle = (value, actionIdToChange) => {
+    // const goal2 = {...goalUnit};
+
+    // const indexToChange = goal2.actionsDescription.findIndex(
+    //   action => action.actionId === actionIdToChange,
+    // );
+
+    // goal2.actionsDescription[indexToChange].isDone = value;
+    // handleGoalChange(goal2);
+
+    const indexToChange = goalUnit.actionsDescription.findIndex(
+      action => action.actionId === actionIdToChange,
+    );
+
+    goalUnit.actionsDescription[indexToChange].isDone = value;
+    handleGoalChange(goalUnit);
+  };
+
   const handleOnSubmitText = (text, actionIdToChange) => {
     const indexToChange = goalUnit.actionsDescription.findIndex(
       action => action.actionId === actionIdToChange,
@@ -45,12 +67,24 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
     handleGoalChange(changedGoal);
   };
 
+  const _keyboardDidHide = () => {
+    myInput.current && myInput.current.blur();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
+
   const Actions = () => {
     return goalUnit.actionsDescription.map(action => (
       <View key={action.actionId} style={styles.checkboxContainer}>
         <CheckBox
           value={action.isDone}
-          onValueChange={console.log('checkbox')}
+          onValueChange={value => handleCheckboxToggle(value, action.actionId)}
           style={styles.checkbox}
         />
         <TextInput
@@ -68,6 +102,7 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
           onEndEditing={event =>
             handleOnSubmitText(event.nativeEvent.text, action.actionId)
           }
+          ref={myInput}
         />
         <TouchableWithoutFeedback
           nativeID={action.actionId}

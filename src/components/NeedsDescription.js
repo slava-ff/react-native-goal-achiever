@@ -1,11 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -13,6 +14,8 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
 const NeedsDescription = ({goalUnit, handleGoalChange}) => {
+  const myInput = useRef();
+
   const handleOnSubmitText = (text, needIdToChange) => {
     const indexToChange = goalUnit.needsDescription.simpleNeeds.findIndex(
       need => need.needId === needIdToChange,
@@ -45,6 +48,18 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
     handleGoalChange(changedGoal);
   };
 
+  const _keyboardDidHide = () => {
+    myInput.current && myInput.current.blur();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
+
   const Needs = () => {
     return goalUnit.needsDescription.simpleNeeds.map(need => (
       <View key={need.needId} style={styles.checkboxContainer}>
@@ -68,6 +83,7 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
           onEndEditing={event =>
             handleOnSubmitText(event.nativeEvent.text, need.needId)
           }
+          ref={myInput}
         />
         <TouchableWithoutFeedback
           nativeID={need.needId}
