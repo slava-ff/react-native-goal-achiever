@@ -13,20 +13,11 @@ import CheckBox from '@react-native-community/checkbox';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
-const ActionsDescription = ({goalUnit, handleGoalChange}) => {
-  // console.log('===>>: ActionsDescription -> goalUnit', goalUnit);
+const ActionsDescription = ({goalUnitStr, handleGoalChange}) => {
+  const goalUnit = JSON.parse(goalUnitStr);
   const myInput = useRef();
 
   const handleCheckboxToggle = (value, actionIdToChange) => {
-    // const goal2 = {...goalUnit};
-
-    // const indexToChange = goal2.actionsDescription.findIndex(
-    //   action => action.actionId === actionIdToChange,
-    // );
-
-    // goal2.actionsDescription[indexToChange].isDone = value;
-    // handleGoalChange(goal2);
-
     const indexToChange = goalUnit.actionsDescription.findIndex(
       action => action.actionId === actionIdToChange,
     );
@@ -45,26 +36,23 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
   };
 
   const handleDeleteItem = idToDelete => {
-    // if leave only goalUnit - not live updating but onBack - sees changes
-    const changedGoal = {...goalUnit};
-    const indexToDelete = changedGoal.actionsDescription.findIndex(
+    const indexToDelete = goalUnit.actionsDescription.findIndex(
       action => action.actionId === idToDelete,
     );
 
-    changedGoal.actionsDescription.splice(indexToDelete, 1);
-    handleGoalChange(changedGoal);
+    goalUnit.actionsDescription.splice(indexToDelete, 1);
+    handleGoalChange(goalUnit);
   };
 
   const handleAddItem = () => {
-    const changedGoal = {...goalUnit};
     const newId = guidGenerator();
 
-    changedGoal.actionsDescription.push({
+    goalUnit.actionsDescription.push({
       actionId: newId,
       isDone: false,
       actionText: '',
     });
-    handleGoalChange(changedGoal);
+    handleGoalChange(goalUnit);
   };
 
   const _keyboardDidHide = () => {
@@ -150,6 +138,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: -13,
     left: 20,
+    fontWeight: 'bold',
     backgroundColor: Colors.lighter,
   },
   checkboxContainer: {
@@ -163,7 +152,6 @@ const styles = StyleSheet.create({
   itemText: {
     paddingLeft: 8,
     fontSize: 16,
-    fontWeight: 'bold',
     width: '80%',
     padding: 2,
   },

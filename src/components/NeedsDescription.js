@@ -13,8 +13,18 @@ import CheckBox from '@react-native-community/checkbox';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
-const NeedsDescription = ({goalUnit, handleGoalChange}) => {
+const NeedsDescription = ({goalUnitStr, handleGoalChange}) => {
+  const goalUnit = JSON.parse(goalUnitStr);
   const myInput = useRef();
+
+  const handleCheckboxToggle = (value, needIdToChange) => {
+    const indexToChange = goalUnit.needsDescription.simpleNeeds.findIndex(
+      need => need.needId === needIdToChange,
+    );
+
+    goalUnit.needsDescription.simpleNeeds[indexToChange].doHave = value;
+    handleGoalChange(goalUnit);
+  };
 
   const handleOnSubmitText = (text, needIdToChange) => {
     const indexToChange = goalUnit.needsDescription.simpleNeeds.findIndex(
@@ -26,26 +36,23 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
   };
 
   const handleDeleteItem = idToDelete => {
-    // if leave only goalUnit - not live updating but onBack - sees changes
-    const changedGoal = {...goalUnit};
-    const indexToDelete = changedGoal.needsDescription.simpleNeeds.findIndex(
+    const indexToDelete = goalUnit.needsDescription.simpleNeeds.findIndex(
       need => need.needId === idToDelete,
     );
 
-    changedGoal.needsDescription.simpleNeeds.splice(indexToDelete, 1);
-    handleGoalChange(changedGoal);
+    goalUnit.needsDescription.simpleNeeds.splice(indexToDelete, 1);
+    handleGoalChange(goalUnit);
   };
 
   const handleAddItem = () => {
-    const changedGoal = {...goalUnit};
     const newId = guidGenerator();
 
-    changedGoal.needsDescription.simpleNeeds.push({
+    goalUnit.needsDescription.simpleNeeds.push({
       needId: newId,
       doHave: false,
       needText: '',
     });
-    handleGoalChange(changedGoal);
+    handleGoalChange(goalUnit);
   };
 
   const _keyboardDidHide = () => {
@@ -65,7 +72,7 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
       <View key={need.needId} style={styles.checkboxContainer}>
         <CheckBox
           value={need.doHave}
-          onValueChange={value => console.log('checkbox: ', value)}
+          onValueChange={value => handleCheckboxToggle(value, need.needId)}
           style={styles.checkbox}
         />
         <TextInput
@@ -131,6 +138,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: -13,
     left: 20,
+    fontWeight: 'bold',
     backgroundColor: Colors.lighter,
   },
   checkboxContainer: {
@@ -144,7 +152,6 @@ const styles = StyleSheet.create({
   itemText: {
     paddingLeft: 8,
     fontSize: 16,
-    fontWeight: 'bold',
     width: '80%',
     padding: 2,
   },

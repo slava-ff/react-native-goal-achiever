@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: -13,
     left: 20,
+    fontWeight: 'bold',
     backgroundColor: Colors.lighter,
   },
   dateWrapper: {
@@ -87,7 +88,6 @@ const styles = StyleSheet.create({
   date: {
     paddingHorizontal: 12,
     fontSize: 18,
-    fontWeight: 'bold',
     marginTop: 0,
     marginLeft: 2,
     marginBottom: 12,

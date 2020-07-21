@@ -19,7 +19,6 @@ import DB from '../helpers/db.helper';
 
 const Goal = ({route, navigation}) => {
   const defaultGoal = JSON.stringify(route.params.goalUnit);
-  console.log('===>>: Goal -> defaultGoal', defaultGoal);
   const [goalUnit, setGoalUnit] = useState(route.params.goalUnit);
 
   useLayoutEffect(() => {
@@ -118,11 +117,11 @@ const Goal = ({route, navigation}) => {
           handleGoalChange={handleGoalChange}
         />
         <NeedsDescription
-          goalUnit={goalUnit}
+          goalUnitStr={JSON.stringify(goalUnit)}
           handleGoalChange={handleGoalChange}
         />
         <ActionsDescription
-          goalUnit={goalUnit}
+          goalUnitStr={JSON.stringify(goalUnit)}
           handleGoalChange={handleGoalChange}
         />
         <DatePicker goalUnit={goalUnit} handleGoalChange={handleGoalChange} />

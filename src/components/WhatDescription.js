@@ -57,12 +57,12 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: -13,
     left: 20,
+    fontWeight: 'bold',
     backgroundColor: Colors.lighter,
   },
   input: {
     paddingHorizontal: 12,
     fontSize: 16,
-    fontWeight: 'bold',
     marginTop: -15,
   },
 });
