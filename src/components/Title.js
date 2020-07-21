@@ -1,14 +1,29 @@
-import React from 'react';
-import {StyleSheet, View, Image, TextInput} from 'react-native';
+import React, {useRef, useEffect} from 'react';
+import {StyleSheet, View, Image, TextInput, Keyboard} from 'react-native';
 
 const imgSrc1 = '../assets/iconsPNG/cat_1.png';
 
 const Title = ({goalUnit, handleGoalChange}) => {
+  const myInput = useRef();
+
   const handleOnSubmitText = text => {
     goalUnit.goalName = text;
 
     handleGoalChange(goalUnit);
   };
+
+  const _keyboardDidHide = () => {
+    myInput.current && myInput.current.blur();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
+
   return (
     <View style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
       <View style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
@@ -23,6 +38,7 @@ const Title = ({goalUnit, handleGoalChange}) => {
           handleOnSubmitText(event.nativeEvent.TextInput)
         }
         onEndEditing={event => handleOnSubmitText(event.nativeEvent.text)}
+        ref={myInput}
       />
       <View style={styles.freeSpace} />
     </View>
@@ -31,10 +47,10 @@ const Title = ({goalUnit, handleGoalChange}) => {
 
 const styles = StyleSheet.create({
   logoAndGoalWrapper: {
-    // height: '150%',
     display: 'flex',
     flexDirection: 'row',
     flex: 7,
+    marginTop: 10,
   },
   freeSpace: {
     flex: 1,
@@ -48,7 +64,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   logoWrapper: {
-    flex: 1,
     backgroundColor: 'gray',
     borderRadius: 50,
     height: 70,

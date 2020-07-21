@@ -1,14 +1,28 @@
-import React from 'react';
-import {StyleSheet, View, Text, TextInput} from 'react-native';
+import React, {useRef, useEffect} from 'react';
+import {StyleSheet, View, Text, TextInput, Keyboard} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const WhyDescription = ({goalUnit, handleGoalChange}) => {
+  const myInput = useRef();
+
   const handleOnSubmitText = text => {
     goalUnit.whyDescription = text;
 
     handleGoalChange(goalUnit);
   };
+
+  const _keyboardDidHide = () => {
+    myInput.current && myInput.current.blur();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
 
   return (
     <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
@@ -23,6 +37,7 @@ const WhyDescription = ({goalUnit, handleGoalChange}) => {
           handleOnSubmitText(event.nativeEvent.TextInput)
         }
         onEndEditing={event => handleOnSubmitText(event.nativeEvent.text)}
+        ref={myInput}
       />
     </View>
   );
@@ -46,8 +61,9 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingHorizontal: 12,
-    fontSize: 18,
-    marginTop: -11,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: -15,
   },
 });
 

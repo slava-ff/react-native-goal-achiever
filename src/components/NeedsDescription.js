@@ -1,11 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -13,18 +14,19 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
 const NeedsDescription = ({goalUnit, handleGoalChange}) => {
-  const handleOnSubmitText = (text, needIdToChange) => {
-    const changedGoal = {...goalUnit};
+  const myInput = useRef();
 
-    const indexToChange = changedGoal.needsDescription.simpleNeeds.findIndex(
+  const handleOnSubmitText = (text, needIdToChange) => {
+    const indexToChange = goalUnit.needsDescription.simpleNeeds.findIndex(
       need => need.needId === needIdToChange,
     );
 
-    changedGoal.needsDescription.simpleNeeds[indexToChange].needText = text;
-    handleGoalChange(changedGoal);
+    goalUnit.needsDescription.simpleNeeds[indexToChange].needText = text;
+    handleGoalChange(goalUnit);
   };
 
   const handleDeleteItem = idToDelete => {
+    // if leave only goalUnit - not live updating but onBack - sees changes
     const changedGoal = {...goalUnit};
     const indexToDelete = changedGoal.needsDescription.simpleNeeds.findIndex(
       need => need.needId === idToDelete,
@@ -46,12 +48,24 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
     handleGoalChange(changedGoal);
   };
 
+  const _keyboardDidHide = () => {
+    myInput.current && myInput.current.blur();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
+
   const Needs = () => {
     return goalUnit.needsDescription.simpleNeeds.map(need => (
       <View key={need.needId} style={styles.checkboxContainer}>
         <CheckBox
           value={need.doHave}
-          onValueChange={console.log('checkbox')}
+          onValueChange={value => console.log('checkbox: ', value)}
           style={styles.checkbox}
         />
         <TextInput
@@ -69,6 +83,7 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
           onEndEditing={event =>
             handleOnSubmitText(event.nativeEvent.text, need.needId)
           }
+          ref={myInput}
         />
         <TouchableWithoutFeedback
           nativeID={need.needId}
@@ -84,7 +99,7 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
   const AddItem = () => {
     return (
       <TouchableWithoutFeedback onPress={handleAddItem}>
-        <View style={styles.checkboxContainer}>
+        <View style={styles.addItemWrapper}>
           <Text style={styles.plus}>+</Text>
           <Text style={styles.addItemText}>New need</Text>
         </View>
@@ -125,22 +140,26 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     position: 'relative',
-    // top: 8,
   },
   itemText: {
     paddingLeft: 8,
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
     width: '80%',
-    // borderWidth: 1,
     padding: 2,
   },
   delete: {
-    // borderWidth: 1,
     fontSize: 23,
     color: 'gray',
     fontWeight: 'bold',
     marginLeft: 10,
     transform: [{rotate: '45deg'}],
+  },
+  addItemWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginTop: 5,
   },
   plus: {
     position: 'relative',
@@ -152,6 +171,7 @@ const styles = StyleSheet.create({
   },
   addItemText: {
     paddingHorizontal: 8,
+    color: 'gray',
     fontSize: 16,
     marginLeft: 11,
   },

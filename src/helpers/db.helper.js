@@ -1,5 +1,5 @@
-import Datastore from 'react-native-local-mongodb';
-const db = new Datastore({filename: 'asyncStorageKey', autoload: true});
+import PouchDB from 'pouchdb-react-native';
+const db = new PouchDB('mydb');
 
 const errorHelper = (text, err) => {
   if (err) {
@@ -55,54 +55,68 @@ const deleteChildrenGoalsAndThenItself = goal => {
 };
 
 export default {
-  getAll() {
-    return db.find({}, function(err, docs) {
-      if (err) {
-        return errorHelper('db.getAll', err);
-      }
-
-      return docs;
-    });
+  async getAll() {
+    const allDocs = await db.allDocs();
+    return allDocs.rows.map(doc => doc.doc);
   },
 
-  saveTopGoal(goal) {
-    return db.insert(goal, function(err, newDoc) {
-      if (err) {
-        return errorHelper('db.saveTopGoal', err);
-      }
+  async saveGoal(goal) {
+    // return db.insert(goal, function(err, newDoc) {
+    //   if (err) {
+    //     return errorHelper('db.saveTopGoal', err);
+    //   }
+    //   return newDoc;
+    // });
 
-      return newDoc;
-    });
+    return await db.post(goal);
+
+    // if (!goal.parentGoalId) {
+    //   console.log('===>>: DB 2-1');
+    //   return newGoal;
+    // } else {
+    //   console.log('===>>: DB 2-2');
+    //   const updatedGoal = await db.updateAsync(
+    //     {_id: goal.parentGoalId},
+    //     {$push: {'needsDescription.childrenGoalsIds': newGoal._id}},
+    //     {},
+    //   );
+
+    //   if (updatedGoal) {
+    //     return newGoal;
+    //   } else {
+    //     return errorHelper('db.saveNestedGoal.return');
+    //   }
+    // }
   },
 
-  saveNestedGoal(goal) {
-    const newGoal = db.insert(goal, function(err, newDoc) {
-      if (err) {
-        return errorHelper('db.saveNestedGoal.insert', err);
-      }
+  // saveNestedGoal(goal) {
+  //   const newGoal = db.insert(goal, function(err, newDoc) {
+  //     if (err) {
+  //       return errorHelper('db.saveNestedGoal.insert', err);
+  //     }
 
-      return newDoc;
-    });
+  //     return newDoc;
+  //   });
 
-    const updatedGoal = db.update(
-      {_id: goal.parentGoalId},
-      {$push: {'needsDescription.childrenGoalsIds': newGoal._id}},
-      {},
-      function(err, doc) {
-        if (err) {
-          return errorHelper('db.saveNestedGoal.update', err);
-        }
+  //   const updatedGoal = db.update(
+  //     {_id: goal.parentGoalId},
+  //     {$push: {'needsDescription.childrenGoalsIds': newGoal._id}},
+  //     {},
+  //     function(err, doc) {
+  //       if (err) {
+  //         return errorHelper('db.saveNestedGoal.update', err);
+  //       }
 
-        return doc;
-      },
-    );
+  //       return doc;
+  //     },
+  //   );
 
-    if (updatedGoal) {
-      return newGoal;
-    } else {
-      return errorHelper('db.saveNestedGoal.return');
-    }
-  },
+  //   if (updatedGoal) {
+  //     return newGoal;
+  //   } else {
+  //     return errorHelper('db.saveNestedGoal.return');
+  //   }
+  // },
 
   getById(id) {
     return db.find({_id: id}, function(err, doc) {
@@ -114,27 +128,12 @@ export default {
     });
   },
 
-  getAllTopLevel() {
-    return db.find({parentGoalId: ''}, function(err, docs) {
-      if (err) {
-        return errorHelper('db.getAllTopLevel', err);
-      }
-
-      return docs;
-    });
+  async getAllTopLevel() {
+    return await db.findAsync({parentGoalId: ''});
   },
 
-  getAllLowLevel() {
-    return db.find({'needsDescription.childrenGoalsIds': []}, function(
-      err,
-      docs,
-    ) {
-      if (err) {
-        return errorHelper('db.getAllLowLevel', err);
-      }
-
-      return docs;
-    });
+  async getAllLowLevel() {
+    return await db.findfindAsync({'needsDescription.childrenGoalsIds': []});
   },
 
   update(goal) {
@@ -153,29 +152,34 @@ export default {
     });
   },
 
-  delete(goal) {
-    // delete from parent goal
-    if (goal.parentGoalId) {
-      const updatedParentGoal = db.update(
-        {_id: goal.parentGoalId},
-        {$pull: {'needsDescription.childrenGoalsIds': goal._id}},
-        {},
-        function(err, doc) {
-          if (err) {
-            return errorHelper('db.delete.updatedParentGoal', err);
-          }
+  async delete(goal) {
+    return await db.remove(goal);
+    // // delete from parent goal
+    // if (goal.parentGoalId) {
+    //   const updatedParentGoal = db.update(
+    //     {_id: goal.parentGoalId},
+    //     {$pull: {'needsDescription.childrenGoalsIds': goal._id}},
+    //     {},
+    //     function(err, doc) {
+    //       if (err) {
+    //         return errorHelper('db.delete.updatedParentGoal', err);
+    //       }
 
-          return doc;
-        },
-      );
+    //       return doc;
+    //     },
+    //   );
 
-      if (!updatedParentGoal) {
-        return errorHelper('db.delete.!updatedParentGoal');
-      }
-    }
+    //   if (!updatedParentGoal) {
+    //     return errorHelper('db.delete.!updatedParentGoal');
+    //   }
+    // }
 
-    // delete all its children goals and their children goals and etc... and then itself
-    return deleteChildrenGoalsAndThenItself(goal);
+    // // delete all its children goals and their children goals and etc... and then itself
+    // return deleteChildrenGoalsAndThenItself(goal);
+  },
+
+  async deleteAll() {
+    return await db.removeAsync({}, {multi: true});
   },
 
   getNewSchema() {

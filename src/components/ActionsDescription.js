@@ -1,11 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -13,18 +14,38 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
 const ActionsDescription = ({goalUnit, handleGoalChange}) => {
-  const handleOnSubmitText = (text, actionIdToChange) => {
-    const changedGoal = {...goalUnit};
+  // console.log('===>>: ActionsDescription -> goalUnit', goalUnit);
+  const myInput = useRef();
 
-    const indexToChange = changedGoal.actionsDescription.findIndex(
+  const handleCheckboxToggle = (value, actionIdToChange) => {
+    // const goal2 = {...goalUnit};
+
+    // const indexToChange = goal2.actionsDescription.findIndex(
+    //   action => action.actionId === actionIdToChange,
+    // );
+
+    // goal2.actionsDescription[indexToChange].isDone = value;
+    // handleGoalChange(goal2);
+
+    const indexToChange = goalUnit.actionsDescription.findIndex(
       action => action.actionId === actionIdToChange,
     );
 
-    changedGoal.actionsDescription[indexToChange].actionText = text;
-    handleGoalChange(changedGoal);
+    goalUnit.actionsDescription[indexToChange].isDone = value;
+    handleGoalChange(goalUnit);
+  };
+
+  const handleOnSubmitText = (text, actionIdToChange) => {
+    const indexToChange = goalUnit.actionsDescription.findIndex(
+      action => action.actionId === actionIdToChange,
+    );
+
+    goalUnit.actionsDescription[indexToChange].actionText = text;
+    handleGoalChange(goalUnit);
   };
 
   const handleDeleteItem = idToDelete => {
+    // if leave only goalUnit - not live updating but onBack - sees changes
     const changedGoal = {...goalUnit};
     const indexToDelete = changedGoal.actionsDescription.findIndex(
       action => action.actionId === idToDelete,
@@ -46,12 +67,24 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
     handleGoalChange(changedGoal);
   };
 
+  const _keyboardDidHide = () => {
+    myInput.current && myInput.current.blur();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    return () => {
+      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
+    };
+  }, []);
+
   const Actions = () => {
     return goalUnit.actionsDescription.map(action => (
       <View key={action.actionId} style={styles.checkboxContainer}>
         <CheckBox
           value={action.isDone}
-          onValueChange={console.log('checkbox')}
+          onValueChange={value => handleCheckboxToggle(value, action.actionId)}
           style={styles.checkbox}
         />
         <TextInput
@@ -69,6 +102,7 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
           onEndEditing={event =>
             handleOnSubmitText(event.nativeEvent.text, action.actionId)
           }
+          ref={myInput}
         />
         <TouchableWithoutFeedback
           nativeID={action.actionId}
@@ -84,7 +118,7 @@ const ActionsDescription = ({goalUnit, handleGoalChange}) => {
   const AddItem = () => {
     return (
       <TouchableWithoutFeedback onPress={handleAddItem}>
-        <View style={styles.checkboxContainer}>
+        <View style={styles.addItemWrapper}>
           <Text style={styles.plus}>+</Text>
           <Text style={styles.addItemText}>New action</Text>
         </View>
@@ -125,22 +159,26 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     position: 'relative',
-    // top: 8,
   },
   itemText: {
     paddingLeft: 8,
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
     width: '80%',
-    // borderWidth: 1,
     padding: 2,
   },
   delete: {
-    // borderWidth: 1,
     fontSize: 23,
     color: 'gray',
     fontWeight: 'bold',
     marginLeft: 10,
     transform: [{rotate: '45deg'}],
+  },
+  addItemWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginTop: 5,
   },
   plus: {
     position: 'relative',
@@ -153,6 +191,7 @@ const styles = StyleSheet.create({
   addItemText: {
     paddingHorizontal: 8,
     fontSize: 16,
+    color: 'gray',
     marginLeft: 11,
   },
 });

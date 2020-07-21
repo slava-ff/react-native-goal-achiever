@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import {Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -17,7 +18,22 @@ const App = () => {
           options={{title: 'Top level goals'}}
           component={TopLevelGoals}
         />
-        <Stack.Screen name="Goal" options={{title: 'Goal'}} component={Goal} />
+        <Stack.Screen
+          name="Goal"
+          options={{
+            title: 'Goal',
+            // headerRight: () => (
+            //   <Button
+            //     onPress={val1 => console.log('val1:', val1)}
+            //     title="Del"
+            //     color="gray"
+            //     // eslint-disable-next-line react-native/no-inline-styles
+            //     style={{padding: 10}}
+            //   />
+            // ),
+          }}
+          component={Goal}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
