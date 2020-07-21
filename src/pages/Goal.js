@@ -52,7 +52,6 @@ const Goal = ({route, navigation}) => {
   }, [goalUnit, navigation]);
 
   const handleGoalChange = changedGoal => {
-    // const newGoal = {...changedGoal};
     setGoalUnit(changedGoal);
   };
 

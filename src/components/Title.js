@@ -1,6 +1,7 @@
 import React, {useRef, useEffect} from 'react';
 import {StyleSheet, View, Image, TextInput, Keyboard} from 'react-native';
 
+import MyImage from '../components/MyImage';
 const imgSrc1 = '../assets/iconsPNG/cat_1.png';
 
 const Title = ({goalUnit, handleGoalChange}) => {
@@ -27,7 +28,7 @@ const Title = ({goalUnit, handleGoalChange}) => {
   return (
     <View style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
       <View style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
-        <Image source={require(imgSrc1)} style={styles.logo} />
+        <MyImage imgName={goalUnit.logo} style={styles.logo} />
       </View>
       <TextInput
         style={styles.goalName}

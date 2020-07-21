@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 
+import MyImage from '../components/MyImage';
 import getDateDDMMYYY from '../helpers/date.helper';
 
 const GoalLine = ({goalUnit, navigation}) => {
@@ -27,7 +28,7 @@ const GoalLine = ({goalUnit, navigation}) => {
           style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
           <View
             style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
-            <Image source={require(imgSrc1)} style={styles.logo} />
+            <MyImage imgName={goalUnit.logo} style={styles.logo} />
           </View>
           <Text style={styles.goalText}>{goalUnit.goalName}</Text>
         </View>
