@@ -22,6 +22,12 @@ const Title = ({goalUnitStr, handleGoalChange}) => {
     handleGoalChange(goalUnit);
   };
 
+  const handleOnSetColor = colorName => {
+    goalUnit.color = colorName;
+
+    handleGoalChange(goalUnit);
+  };
+
   const handleOnSubmitText = text => {
     goalUnit.goalName = text;
 
@@ -44,13 +50,13 @@ const Title = ({goalUnitStr, handleGoalChange}) => {
     <View style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
       <IconColorSelector
         isVisible={isModalVisible}
-        // goalUnit={goalUnit}
+        goalUnit={goalUnit}
         setIsModalVisible={setIsModalVisible}
         handleOnSetIcon={handleOnSetIcon}
+        handleOnSetColor={handleOnSetColor}
       />
       <TouchableWithoutFeedback
         onPress={() => {
-          console.log('isModalVisible-1');
           setIsModalVisible(!isModalVisible);
         }}>
         <View

@@ -4,41 +4,74 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   Modal,
   ScrollView,
-  FlatList,
 } from 'react-native';
 
 import iconNames from '../assets/iconNames';
+import colorNames from '../helpers/color.helper';
 import MyImage from '../components/MyImage';
 
 const IconColorSelector = ({
   isVisible,
   setIsModalVisible,
-  // goalUnit,
+  goalUnit,
   handleOnSetIcon,
+  handleOnSetColor,
 }) => {
-  // const [chosenLogo, setChosenLogo] = useState(goalUnit.logo || '');
-  console.log('isModalVisible-2');
+  const [activeTab, setActiveTab] = useState('color');
 
   const ImageSelector = ({imgName}) => {
-    console.log('isModalVisible-3');
     return (
       <View style={{margin: 6}}>
         <TouchableOpacity
           onPress={() => {
-            // setChosenLogo(imgName);
             handleOnSetIcon(imgName);
           }}>
           <View
             style={{
               ...styles.logoWrapper,
-              // backgroundColor: chosenLogo === imgName ? '#2196F3' : 'gray',
-              backgroundColor: 'gray',
+              backgroundColor: goalUnit.color || 'gray',
             }}>
             <MyImage imgName={imgName} style={styles.logo} />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const ColorSelector = ({colorName}) => {
+    return (
+      <View style={{margin: 6}}>
+        <TouchableOpacity
+          onPress={() => {
+            handleOnSetColor(colorName);
+          }}>
+          <View
+            style={{
+              ...styles.logoWrapper,
+              backgroundColor: colorName,
+              ...(!goalUnit.logo
+                ? {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }
+                : {}),
+            }}>
+            {!goalUnit.logo ? (
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  width: 20,
+                  height: 20,
+                  borderRadius: 20,
+                }}
+              />
+            ) : (
+              <MyImage imgName={goalUnit.logo} style={styles.logo} />
+            )}
           </View>
         </TouchableOpacity>
       </View>
@@ -50,21 +83,46 @@ const IconColorSelector = ({
       <Modal animationType="fade" transparent={true} visible={isVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <View style={styles.tabsWrap}>
+              <TouchableOpacity
+                style={{
+                  ...styles.colorTab,
+                  backgroundColor: activeTab === 'color' ? 'blue' : '#2196F3',
+                }}
+                onPress={() => {
+                  setActiveTab('color');
+                }}>
+                <Text style={styles.textStyle}>Color</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  ...styles.logoTab,
+                  backgroundColor: activeTab === 'logo' ? 'blue' : '#2196F3',
+                }}
+                onPress={() => {
+                  setActiveTab('logo');
+                }}>
+                <Text style={styles.textStyle}>Logo</Text>
+              </TouchableOpacity>
+            </View>
+
             <ScrollView
               style={styles.scroll}
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}>
-              {iconNames.map(name => (
-                <ImageSelector imgName={name} />
-              ))}
+              {activeTab === 'logo' &&
+                iconNames.map(name => <ImageSelector imgName={name} />)}
+              {activeTab === 'color' &&
+                colorNames.map(name => <ColorSelector colorName={name} />)}
             </ScrollView>
-            <TouchableHighlight
+
+            <TouchableOpacity
               style={styles.openButton}
               onPress={() => {
                 setIsModalVisible(!isVisible);
               }}>
               <Text style={styles.textStyle}>Ok</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -86,7 +144,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'white',
     borderRadius: 20,
-    // paddingHorizontal: 20,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -96,18 +153,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    // borderWidth: 1,
+  },
+  tabsWrap: {
+    width: '100%',
+    borderTopStartRadius: 20,
+    borderTopEndRadius: 20,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  logoTab: {
+    flexGrow: 1,
+    padding: 10,
+    borderTopEndRadius: 20,
+  },
+  colorTab: {
+    flexGrow: 1,
+    padding: 10,
+    borderTopStartRadius: 20,
   },
   openButton: {
-    // backgroundColor: '#F194FF',
     backgroundColor: '#2196F3',
     width: '100%',
-    // borderRadius: 20,
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,
     padding: 10,
     elevation: 2,
-    // borderWidth: 1,
   },
   textStyle: {
     color: 'white',
@@ -142,30 +212,5 @@ const styles = StyleSheet.create({
     top: '-25%',
   },
 });
-
-// const styles = StyleSheet.create({
-//   modal: {
-//     borderWidth: 1,
-//     borderColor: 'black',
-//     backgroundColor: 'red',
-//     width: 10,
-//     height: 10,
-//     position: 'absolute',
-//   },
-//   logoWrapper: {
-//     backgroundColor: 'gray',
-//     borderRadius: 50,
-//     height: 70,
-//     padding: '4%',
-//     width: 70,
-//   },
-//   logo: {
-//     height: '150%',
-//     width: '150%',
-//     position: 'relative',
-//     left: '-25%',
-//     top: '-25%',
-//   },
-// });
 
 export default IconColorSelector;
