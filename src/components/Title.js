@@ -1,11 +1,26 @@
-import React, {useRef, useEffect} from 'react';
-import {StyleSheet, View, Image, TextInput, Keyboard} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useRef, useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
+import IconColorSelector from './IconColorSelector';
 import MyImage from '../components/MyImage';
-const imgSrc1 = '../assets/iconsPNG/cat_1.png';
 
-const Title = ({goalUnit, handleGoalChange}) => {
+const Title = ({goalUnitStr, handleGoalChange}) => {
+  const goalUnit = JSON.parse(goalUnitStr);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const myInput = useRef();
+
+  const handleOnSetIcon = iconName => {
+    goalUnit.logo = iconName;
+
+    handleGoalChange(goalUnit);
+  };
 
   const handleOnSubmitText = text => {
     goalUnit.goalName = text;
@@ -27,9 +42,26 @@ const Title = ({goalUnit, handleGoalChange}) => {
 
   return (
     <View style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
-      <View style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
-        <MyImage imgName={goalUnit.logo} style={styles.logo} />
-      </View>
+      <IconColorSelector
+        isVisible={isModalVisible}
+        // goalUnit={goalUnit}
+        setIsModalVisible={setIsModalVisible}
+        handleOnSetIcon={handleOnSetIcon}
+      />
+      <TouchableWithoutFeedback
+        onPress={() => {
+          console.log('isModalVisible-1');
+          setIsModalVisible(!isModalVisible);
+        }}>
+        <View
+          style={{
+            ...styles.logoWrapper,
+            backgroundColor: goalUnit.color,
+            borderWidth: !goalUnit.color ? 1 : 0,
+          }}>
+          <MyImage imgName={goalUnit.logo} style={styles.logo} />
+        </View>
+      </TouchableWithoutFeedback>
       <TextInput
         style={styles.goalName}
         defaultValue={goalUnit.goalName}
@@ -70,6 +102,9 @@ const styles = StyleSheet.create({
     height: 70,
     padding: '4%',
     width: 70,
+    // borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: 'gray',
   },
   logo: {
     height: '150%',

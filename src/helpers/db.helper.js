@@ -189,7 +189,7 @@ export default {
       parentGoalId: '',
       logo: '',
       date: '',
-      color: 'gray',
+      color: '',
       whatDescription: '',
       whyDescription: '',
       needsDescription: {
