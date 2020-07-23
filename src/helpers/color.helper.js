@@ -15,8 +15,8 @@ const colorNames = [
   '#ff9800', // material Orange 500
   '#ff7043', // material Deep Orange 400
   '#bcaaa4', // material Brown 200
-  '#bdbdbd', // material Grey 400
-  '#b0bec5', // material Blue Grey 200
+  '#9e9e9e', // material Grey 500
+  '#90a4ae', // material Blue Grey 300
 ];
 
 export default colorNames;
