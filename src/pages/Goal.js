@@ -57,14 +57,14 @@ const Goal = ({route, navigation}) => {
 
   useEffect(() => {
     const saveGoal = async () => {
-      if (goalUnit.goalName) {
+      if (goalUnit.goalName && goalUnit.color) {
         await DB.saveGoal(goalUnit);
 
         navigation.goBack();
       } else {
         Alert.alert(
           'No name defined',
-          'Fill the "Name" field to save the goal!',
+          'Set "Name" and Color to save the goal!',
         );
       }
     };
