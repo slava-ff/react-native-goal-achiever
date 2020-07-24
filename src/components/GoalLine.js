@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 import MyImage from '../components/MyImage';
 import getDateDDMMYYY from '../helpers/date.helper';
@@ -15,10 +15,6 @@ const GoalLine = ({goalUnit, navigation}) => {
     console.log('===>>: Long Press Button');
   };
 
-  const imgSrc1 = '../assets/iconsPNG/cat_1.png';
-  // const imgSrc1 = `../assets/iconsPNG/${goalUnit.logo}`;
-  // console.log('===>>: GoalLine -> imgSrc1', imgSrc1);
-
   return (
     <TouchableOpacity
       onPress={handleOnPressButton}
@@ -30,7 +26,9 @@ const GoalLine = ({goalUnit, navigation}) => {
             style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
             <MyImage imgName={goalUnit.logo} style={styles.logo} />
           </View>
-          <Text style={styles.goalText}>{goalUnit.goalName}</Text>
+          <Text style={styles.goalText} numberOfLines={1}>
+            {goalUnit.goalName}
+          </Text>
         </View>
         <Text style={styles.date}>{getDateDDMMYYY(goalUnit.date)}</Text>
       </View>
@@ -54,14 +52,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flex: 7,
+    overflow: 'hidden',
   },
   logoWrapper: {
-    flex: 1,
     backgroundColor: 'gray',
     borderRadius: 50,
-    height: '100%',
+    height: 60,
     padding: '4%',
-    width: '100%',
+    width: 60,
   },
   logo: {
     height: '150%',
@@ -72,7 +70,6 @@ const styles = StyleSheet.create({
   },
   goalText: {
     marginLeft: '5%',
-    flex: 6,
     color: 'black',
     padding: '4%',
     fontSize: 24,

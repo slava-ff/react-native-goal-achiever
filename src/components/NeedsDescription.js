@@ -106,7 +106,11 @@ const NeedsDescription = ({goalUnitStr, handleGoalChange}) => {
   const AddItem = () => {
     return (
       <TouchableWithoutFeedback onPress={handleAddItem}>
-        <View style={styles.addItemWrapper}>
+        <View
+          style={{
+            ...styles.addItemWrapper,
+            ...(goalUnit.needsDescription.simpleNeeds.length && {marginTop: 4}),
+          }}>
           <Text style={styles.plus}>+</Text>
           <Text style={styles.addItemText}>New need</Text>
         </View>
@@ -145,6 +149,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginLeft: 10,
+    marginTop: -3,
   },
   checkbox: {
     position: 'relative',
@@ -166,7 +171,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginLeft: 10,
-    marginTop: 5,
+    marginBottom: 6,
   },
   plus: {
     position: 'relative',
