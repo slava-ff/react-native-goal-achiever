@@ -20,6 +20,8 @@ import DB from '../helpers/db.helper';
 const Goal = ({route, navigation}) => {
   const defaultGoal = JSON.stringify(route.params.goalUnit);
   const [goalUnit, setGoalUnit] = useState(route.params.goalUnit);
+  const [isAddedNeed, setIsAddedNeed] = useState(false);
+  const [isAddedAction, setIsAddedAction] = useState(false);
 
   useLayoutEffect(() => {
     const deleteAction = goal => {
@@ -53,6 +55,8 @@ const Goal = ({route, navigation}) => {
 
   const handleGoalChange = changedGoal => {
     setGoalUnit(changedGoal);
+    setIsAddedNeed(false);
+    setIsAddedAction(false);
   };
 
   useEffect(() => {
@@ -121,10 +125,14 @@ const Goal = ({route, navigation}) => {
         <NeedsDescription
           goalUnitStr={JSON.stringify(goalUnit)}
           handleGoalChange={handleGoalChange}
+          isAddedNeed={isAddedNeed}
+          setIsAddedNeed={setIsAddedNeed}
         />
         <ActionsDescription
           goalUnitStr={JSON.stringify(goalUnit)}
           handleGoalChange={handleGoalChange}
+          isAddedAction={isAddedAction}
+          setIsAddedAction={setIsAddedAction}
         />
         <DatePicker goalUnit={goalUnit} handleGoalChange={handleGoalChange} />
       </ScrollView>

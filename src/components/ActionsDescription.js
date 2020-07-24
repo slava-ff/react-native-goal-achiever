@@ -13,9 +13,21 @@ import CheckBox from '@react-native-community/checkbox';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
-const ActionsDescription = ({goalUnitStr, handleGoalChange}) => {
+const ActionsDescription = ({
+  goalUnitStr,
+  handleGoalChange,
+  isAddedAction,
+  setIsAddedAction,
+}) => {
   const goalUnit = JSON.parse(goalUnitStr);
   const myInput = useRef();
+  const myInputFocus = useRef();
+
+  useEffect(() => {
+    if (isAddedAction) {
+      myInputFocus.current && myInputFocus.current.focus();
+    }
+  });
 
   const handleCheckboxToggle = (value, actionIdToChange) => {
     const indexToChange = goalUnit.actionsDescription.findIndex(
@@ -53,10 +65,12 @@ const ActionsDescription = ({goalUnitStr, handleGoalChange}) => {
       actionText: '',
     });
     handleGoalChange(goalUnit);
+    setIsAddedAction(true);
   };
 
   const _keyboardDidHide = () => {
     myInput.current && myInput.current.blur();
+    myInputFocus.current && myInputFocus.current.blur();
   };
 
   useEffect(() => {
@@ -67,40 +81,71 @@ const ActionsDescription = ({goalUnitStr, handleGoalChange}) => {
     };
   }, []);
 
+  const areAllActionsFilled = () => {
+    let result = true;
+
+    if (goalUnit.actionsDescription.length) {
+      goalUnit.actionsDescription.forEach(action => {
+        if (!action.actionText) {
+          result = false;
+        }
+      });
+    }
+
+    return result;
+  };
+
+  const Action = ({action, additionalRef}) => (
+    <View key={action.actionId} style={styles.checkboxContainer}>
+      <CheckBox
+        value={action.isDone}
+        onValueChange={value => handleCheckboxToggle(value, action.actionId)}
+        style={styles.checkbox}
+      />
+      <TextInput
+        style={{
+          ...styles.itemText,
+          textDecorationLine: action.isDone ? 'line-through' : 'none',
+        }}
+        multiline={true}
+        defaultValue={action.actionText}
+        placeholder={'Type here...'}
+        blurOnSubmit={true}
+        onSubmitEditing={event =>
+          handleOnSubmitText(event.nativeEvent.text, action.actionId)
+        }
+        onEndEditing={event =>
+          handleOnSubmitText(event.nativeEvent.text, action.actionId)
+        }
+        ref={additionalRef || myInput}
+      />
+      <TouchableWithoutFeedback
+        nativeID={action.actionId}
+        onPress={() => handleDeleteItem(action.actionId)}>
+        <View>
+          <Text style={styles.delete}>+</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  );
+
   const Actions = () => {
-    return goalUnit.actionsDescription.map(action => (
-      <View key={action.actionId} style={styles.checkboxContainer}>
-        <CheckBox
-          value={action.isDone}
-          onValueChange={value => handleCheckboxToggle(value, action.actionId)}
-          style={styles.checkbox}
-        />
-        <TextInput
-          style={{
-            ...styles.itemText,
-            textDecorationLine: action.isDone ? 'line-through' : 'none',
-          }}
-          multiline={true}
-          defaultValue={action.actionText}
-          placeholder={'Type here...'}
-          blurOnSubmit={true}
-          onSubmitEditing={event =>
-            handleOnSubmitText(event.nativeEvent.text, action.actionId)
-          }
-          onEndEditing={event =>
-            handleOnSubmitText(event.nativeEvent.text, action.actionId)
-          }
-          ref={myInput}
-        />
-        <TouchableWithoutFeedback
-          nativeID={action.actionId}
-          onPress={() => handleDeleteItem(action.actionId)}>
-          <View>
-            <Text style={styles.delete}>+</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
-    ));
+    const length = goalUnit.actionsDescription.length;
+
+    return (
+      <>
+        {goalUnit.actionsDescription.map(
+          (action, i, actions) =>
+            i !== actions.length - 1 && <Action action={action} />,
+        )}
+        {length ? (
+          <Action
+            action={goalUnit.actionsDescription[length - 1]}
+            additionalRef={myInputFocus}
+          />
+        ) : null}
+      </>
+    );
   };
 
   const AddItem = () => {
@@ -122,7 +167,7 @@ const ActionsDescription = ({goalUnitStr, handleGoalChange}) => {
     <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
       <Text style={styles.header}>4. What actions to take to achieve it?</Text>
       <Actions />
-      <AddItem />
+      {areAllActionsFilled() && <AddItem />}
     </View>
   );
 };
@@ -135,6 +180,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 40,
     minHeight: 50,
+    paddingBottom: 8,
   },
   header: {
     paddingHorizontal: 8,
@@ -171,7 +217,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginLeft: 10,
-    marginBottom: 6,
+    marginBottom: -4,
   },
   plus: {
     position: 'relative',
