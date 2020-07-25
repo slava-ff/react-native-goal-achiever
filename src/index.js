@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -20,8 +19,19 @@ const App = () => {
         />
         <Stack.Screen
           name="Goal"
+          component={Goal}
           options={{
             title: 'Goal',
+            // headerLeft: props => (
+            //   <HeaderBackButton
+            //     {...props}
+            //     onPress={() => {
+            //       console.log('===>>: App -> props', props);
+            //       // Do something
+            //     }}
+            //   />
+            // ),
+
             // headerRight: () => (
             //   <Button
             //     onPress={val1 => console.log('val1:', val1)}
@@ -32,7 +42,6 @@ const App = () => {
             //   />
             // ),
           }}
-          component={Goal}
         />
       </Stack.Navigator>
     </NavigationContainer>

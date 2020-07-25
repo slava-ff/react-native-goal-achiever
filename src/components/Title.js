@@ -1,10 +1,31 @@
-import React, {useRef, useEffect} from 'react';
-import {StyleSheet, View, Image, TextInput, Keyboard} from 'react-native';
+import React, {useRef, useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
-const imgSrc1 = '../assets/iconsPNG/cat_1.png';
+import IconColorSelector from './IconColorSelector';
+import MyImage from '../components/MyImage';
 
-const Title = ({goalUnit, handleGoalChange}) => {
+const Title = ({goalUnitStr, handleGoalChange}) => {
+  const goalUnit = JSON.parse(goalUnitStr);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const myInput = useRef();
+
+  const handleOnSetIcon = iconName => {
+    goalUnit.logo = iconName;
+
+    handleGoalChange(goalUnit);
+  };
+
+  const handleOnSetColor = colorName => {
+    goalUnit.color = colorName;
+
+    handleGoalChange(goalUnit);
+  };
 
   const handleOnSubmitText = text => {
     goalUnit.goalName = text;
@@ -26,13 +47,29 @@ const Title = ({goalUnit, handleGoalChange}) => {
 
   return (
     <View style={{...styles.logoAndGoalWrapper, borderColor: goalUnit.color}}>
-      <View style={{...styles.logoWrapper, backgroundColor: goalUnit.color}}>
-        <Image source={require(imgSrc1)} style={styles.logo} />
-      </View>
+      <IconColorSelector
+        isVisible={isModalVisible}
+        goalUnit={goalUnit}
+        setIsModalVisible={setIsModalVisible}
+        handleOnSetIcon={handleOnSetIcon}
+        handleOnSetColor={handleOnSetColor}
+      />
+      <TouchableWithoutFeedback
+        onPress={() => {
+          setIsModalVisible(!isModalVisible);
+        }}>
+        <View
+          style={{
+            ...styles.logoWrapper,
+            backgroundColor: goalUnit.color,
+          }}>
+          <MyImage imgName={goalUnit.logo} style={styles.logo} />
+        </View>
+      </TouchableWithoutFeedback>
       <TextInput
         style={styles.goalName}
         defaultValue={goalUnit.goalName}
-        placeholder={'Type here...'}
+        placeholder={'Name...'}
         blurOnSubmit={true}
         onSubmitEditing={event =>
           handleOnSubmitText(event.nativeEvent.TextInput)
@@ -64,7 +101,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   logoWrapper: {
-    backgroundColor: 'gray',
     borderRadius: 50,
     height: 70,
     padding: '4%',

@@ -13,43 +13,74 @@ import CheckBox from '@react-native-community/checkbox';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import guidGenerator from '../helpers/guid.helper';
 
-const NeedsDescription = ({goalUnit, handleGoalChange}) => {
+const NeedsDescription = ({
+  goalUnitStr,
+  handleGoalChange,
+  isAddedNeed,
+  setIsAddedNeed,
+}) => {
+  const goalUnit = JSON.parse(goalUnitStr);
   const myInput = useRef();
+  const myInputFocus = useRef();
+
+  useEffect(() => {
+    if (isAddedNeed) {
+      myInputFocus.current && myInputFocus.current.focus();
+    }
+  });
+
+  const handleCheckboxToggle = (value, needIdToChange) => {
+    const indexToChange = goalUnit.needsDescription.simpleNeeds.findIndex(
+      need => need.needId === needIdToChange,
+    );
+
+    if (goalUnit.needsDescription.simpleNeeds[indexToChange].needText) {
+      goalUnit.needsDescription.simpleNeeds[indexToChange].doHave = value;
+    } else {
+      goalUnit.needsDescription.simpleNeeds.splice(indexToChange, 1);
+    }
+
+    handleGoalChange(goalUnit);
+  };
 
   const handleOnSubmitText = (text, needIdToChange) => {
     const indexToChange = goalUnit.needsDescription.simpleNeeds.findIndex(
       need => need.needId === needIdToChange,
     );
 
-    goalUnit.needsDescription.simpleNeeds[indexToChange].needText = text;
+    if (text) {
+      goalUnit.needsDescription.simpleNeeds[indexToChange].needText = text;
+    } else {
+      goalUnit.needsDescription.simpleNeeds.splice(indexToChange, 1);
+    }
+
     handleGoalChange(goalUnit);
   };
 
   const handleDeleteItem = idToDelete => {
-    // if leave only goalUnit - not live updating but onBack - sees changes
-    const changedGoal = {...goalUnit};
-    const indexToDelete = changedGoal.needsDescription.simpleNeeds.findIndex(
+    const indexToDelete = goalUnit.needsDescription.simpleNeeds.findIndex(
       need => need.needId === idToDelete,
     );
 
-    changedGoal.needsDescription.simpleNeeds.splice(indexToDelete, 1);
-    handleGoalChange(changedGoal);
+    goalUnit.needsDescription.simpleNeeds.splice(indexToDelete, 1);
+    handleGoalChange(goalUnit);
   };
 
   const handleAddItem = () => {
-    const changedGoal = {...goalUnit};
     const newId = guidGenerator();
 
-    changedGoal.needsDescription.simpleNeeds.push({
+    goalUnit.needsDescription.simpleNeeds.push({
       needId: newId,
       doHave: false,
       needText: '',
     });
-    handleGoalChange(changedGoal);
+    handleGoalChange(goalUnit);
+    setIsAddedNeed(true);
   };
 
   const _keyboardDidHide = () => {
     myInput.current && myInput.current.blur();
+    myInputFocus.current && myInputFocus.current.blur();
   };
 
   useEffect(() => {
@@ -60,46 +91,82 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
     };
   }, []);
 
+  const areAllNeedsFilled = () => {
+    let result = true;
+
+    if (goalUnit.needsDescription.simpleNeeds.length) {
+      goalUnit.needsDescription.simpleNeeds.forEach(need => {
+        if (!need.needText) {
+          result = false;
+        }
+      });
+    }
+
+    return result;
+  };
+
+  const Need = ({need, additionalRef}) => (
+    <View key={need.needId} style={styles.checkboxContainer}>
+      <CheckBox
+        value={need.doHave}
+        onValueChange={value => handleCheckboxToggle(value, need.needId)}
+        style={styles.checkbox}
+      />
+      <TextInput
+        style={{
+          ...styles.itemText,
+          textDecorationLine: need.doHave ? 'line-through' : 'none',
+        }}
+        multiline={true}
+        defaultValue={need.needText}
+        placeholder={'Type here...'}
+        blurOnSubmit={true}
+        onSubmitEditing={event =>
+          handleOnSubmitText(event.nativeEvent.text, need.needId)
+        }
+        onEndEditing={event =>
+          handleOnSubmitText(event.nativeEvent.text, need.needId)
+        }
+        ref={additionalRef || myInput}
+      />
+      <TouchableWithoutFeedback
+        nativeID={need.needId}
+        onPress={() => handleDeleteItem(need.needId)}>
+        <View>
+          <Text style={styles.delete}>+</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  );
+
   const Needs = () => {
-    return goalUnit.needsDescription.simpleNeeds.map(need => (
-      <View key={need.needId} style={styles.checkboxContainer}>
-        <CheckBox
-          value={need.doHave}
-          onValueChange={value => console.log('checkbox: ', value)}
-          style={styles.checkbox}
-        />
-        <TextInput
-          style={{
-            ...styles.itemText,
-            textDecorationLine: need.doHave ? 'line-through' : 'none',
-          }}
-          multiline={true}
-          defaultValue={need.needText}
-          placeholder={'Type here...'}
-          blurOnSubmit={true}
-          onSubmitEditing={event =>
-            handleOnSubmitText(event.nativeEvent.text, need.needId)
-          }
-          onEndEditing={event =>
-            handleOnSubmitText(event.nativeEvent.text, need.needId)
-          }
-          ref={myInput}
-        />
-        <TouchableWithoutFeedback
-          nativeID={need.needId}
-          onPress={() => handleDeleteItem(need.needId)}>
-          <View>
-            <Text style={styles.delete}>+</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
-    ));
+    const length = goalUnit.needsDescription.simpleNeeds.length;
+
+    return (
+      <>
+        {goalUnit.needsDescription.simpleNeeds.map(
+          (need, i, needs) =>
+            i !== needs.length - 1 && <Need need={need} key={need.needId} />,
+        )}
+        {length ? (
+          <Need
+            need={goalUnit.needsDescription.simpleNeeds[length - 1]}
+            key={goalUnit.needsDescription.simpleNeeds[length - 1].needId}
+            additionalRef={myInputFocus}
+          />
+        ) : null}
+      </>
+    );
   };
 
   const AddItem = () => {
     return (
       <TouchableWithoutFeedback onPress={handleAddItem}>
-        <View style={styles.addItemWrapper}>
+        <View
+          style={{
+            ...styles.addItemWrapper,
+            ...(goalUnit.needsDescription.simpleNeeds.length && {marginTop: 4}),
+          }}>
           <Text style={styles.plus}>+</Text>
           <Text style={styles.addItemText}>New need</Text>
         </View>
@@ -111,7 +178,7 @@ const NeedsDescription = ({goalUnit, handleGoalChange}) => {
     <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
       <Text style={styles.header}>3. What do I need to achieve it?</Text>
       <Needs />
-      <AddItem />
+      {areAllNeedsFilled() && <AddItem />}
     </View>
   );
 };
@@ -124,6 +191,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 40,
     minHeight: 50,
+    paddingBottom: 8,
   },
   header: {
     paddingHorizontal: 8,
@@ -131,12 +199,14 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: -13,
     left: 20,
+    fontWeight: 'bold',
     backgroundColor: Colors.lighter,
   },
   checkboxContainer: {
     display: 'flex',
     flexDirection: 'row',
     marginLeft: 10,
+    marginTop: -3,
   },
   checkbox: {
     position: 'relative',
@@ -144,7 +214,6 @@ const styles = StyleSheet.create({
   itemText: {
     paddingLeft: 8,
     fontSize: 16,
-    fontWeight: 'bold',
     width: '80%',
     padding: 2,
   },
@@ -159,7 +228,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginLeft: 10,
-    marginTop: 5,
+    marginBottom: -4,
   },
   plus: {
     position: 'relative',

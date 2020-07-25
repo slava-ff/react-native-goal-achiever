@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect, useCallback} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -7,6 +7,7 @@ import {
   BackHandler,
   Button,
 } from 'react-native';
+import {HeaderBackButton} from '@react-navigation/stack';
 
 import Title from '../components/Title';
 import WhatDescription from '../components/WhatDescription';
@@ -19,55 +20,18 @@ import DB from '../helpers/db.helper';
 
 const Goal = ({route, navigation}) => {
   const defaultGoal = JSON.stringify(route.params.goalUnit);
-  console.log('===>>: Goal -> defaultGoal', defaultGoal);
   const [goalUnit, setGoalUnit] = useState(route.params.goalUnit);
+  const [isAddedNeed, setIsAddedNeed] = useState(false);
+  const [isAddedAction, setIsAddedAction] = useState(false);
 
-  useLayoutEffect(() => {
-    const deleteAction = goal => {
-      Alert.alert('Delete', 'Are you sure you want to delete this goal?', [
-        {
-          text: 'Cancel',
-          onPress: () => null,
-          style: 'cancel',
-        },
-        {
-          text: 'Delete',
-          onPress: async () => {
-            await DB.delete(goal);
-            navigation.goBack();
-          },
-          style: 'destructive',
-        },
-      ]);
-    };
-
-    navigation.setOptions({
-      headerRight: () => (
-        <Button
-          onPress={() => deleteAction(goalUnit)}
-          title="Del"
-          style={styles.deleteBtn}
-        />
-      ),
-    });
-  }, [goalUnit, navigation]);
-
-  const handleGoalChange = changedGoal => {
-    // const newGoal = {...changedGoal};
-    setGoalUnit(changedGoal);
-  };
-
-  useEffect(() => {
+  const backTrigger = useCallback(() => {
     const saveGoal = async () => {
       if (goalUnit.goalName) {
         await DB.saveGoal(goalUnit);
 
         navigation.goBack();
       } else {
-        Alert.alert(
-          'No name defined',
-          'Fill the "Name" field to save the goal!',
-        );
+        Alert.alert('No name defined', 'Set name to save the goal!');
       }
     };
 
@@ -96,19 +60,63 @@ const Goal = ({route, navigation}) => {
       return true;
     };
 
+    return backAction();
+  }, [defaultGoal, goalUnit, navigation]);
+
+  useLayoutEffect(() => {
+    const deleteAction = goal => {
+      Alert.alert('Delete', 'Are you sure you want to delete this goal?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: async () => {
+            await DB.delete(goal);
+            navigation.goBack();
+          },
+          style: 'destructive',
+        },
+      ]);
+    };
+
+    navigation.setOptions({
+      headerLeft: () => <HeaderBackButton onPress={() => backTrigger()} />,
+      headerRight: () => (
+        <Button
+          onPress={() => deleteAction(goalUnit)}
+          title="Del"
+          style={styles.deleteBtn}
+        />
+      ),
+    });
+  }, [backTrigger, defaultGoal, goalUnit, navigation]);
+
+  const handleGoalChange = changedGoal => {
+    setGoalUnit(changedGoal);
+    setIsAddedNeed(false);
+    setIsAddedAction(false);
+  };
+
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction,
+      backTrigger,
     );
     return () => backHandler.remove();
-  }, [defaultGoal, goalUnit, navigation]);
+  }, [backTrigger, defaultGoal, goalUnit, navigation]);
 
   return (
     <View>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.goalMainWrapper}>
-        <Title goalUnit={goalUnit} handleGoalChange={handleGoalChange} />
+        <Title
+          goalUnitStr={JSON.stringify(goalUnit)}
+          handleGoalChange={handleGoalChange}
+        />
         <WhatDescription
           goalUnit={goalUnit}
           handleGoalChange={handleGoalChange}
@@ -118,12 +126,16 @@ const Goal = ({route, navigation}) => {
           handleGoalChange={handleGoalChange}
         />
         <NeedsDescription
-          goalUnit={goalUnit}
+          goalUnitStr={JSON.stringify(goalUnit)}
           handleGoalChange={handleGoalChange}
+          isAddedNeed={isAddedNeed}
+          setIsAddedNeed={setIsAddedNeed}
         />
         <ActionsDescription
-          goalUnit={goalUnit}
+          goalUnitStr={JSON.stringify(goalUnit)}
           handleGoalChange={handleGoalChange}
+          isAddedAction={isAddedAction}
+          setIsAddedAction={setIsAddedAction}
         />
         <DatePicker goalUnit={goalUnit} handleGoalChange={handleGoalChange} />
       </ScrollView>

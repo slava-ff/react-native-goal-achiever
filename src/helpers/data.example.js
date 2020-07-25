@@ -140,4 +140,4 @@ const goalsTemp = {
   },
 };
 
-export default goalsTemp;
+export default {goalsTemp, goal};
