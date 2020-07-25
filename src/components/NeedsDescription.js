@@ -34,7 +34,12 @@ const NeedsDescription = ({
       need => need.needId === needIdToChange,
     );
 
-    goalUnit.needsDescription.simpleNeeds[indexToChange].doHave = value;
+    if (goalUnit.needsDescription.simpleNeeds[indexToChange].needText) {
+      goalUnit.needsDescription.simpleNeeds[indexToChange].doHave = value;
+    } else {
+      goalUnit.needsDescription.simpleNeeds.splice(indexToChange, 1);
+    }
+
     handleGoalChange(goalUnit);
   };
 
@@ -43,7 +48,12 @@ const NeedsDescription = ({
       need => need.needId === needIdToChange,
     );
 
-    goalUnit.needsDescription.simpleNeeds[indexToChange].needText = text;
+    if (text) {
+      goalUnit.needsDescription.simpleNeeds[indexToChange].needText = text;
+    } else {
+      goalUnit.needsDescription.simpleNeeds.splice(indexToChange, 1);
+    }
+
     handleGoalChange(goalUnit);
   };
 

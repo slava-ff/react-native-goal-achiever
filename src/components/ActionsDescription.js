@@ -34,7 +34,11 @@ const ActionsDescription = ({
       action => action.actionId === actionIdToChange,
     );
 
-    goalUnit.actionsDescription[indexToChange].isDone = value;
+    if (goalUnit.actionsDescription[indexToChange].actionText) {
+      goalUnit.actionsDescription[indexToChange].isDone = value;
+    } else {
+      goalUnit.actionsDescription.splice(indexToChange, 1);
+    }
     handleGoalChange(goalUnit);
   };
 
@@ -43,7 +47,12 @@ const ActionsDescription = ({
       action => action.actionId === actionIdToChange,
     );
 
-    goalUnit.actionsDescription[indexToChange].actionText = text;
+    if (text) {
+      goalUnit.actionsDescription[indexToChange].actionText = text;
+    } else {
+      goalUnit.actionsDescription.splice(indexToChange, 1);
+    }
+
     handleGoalChange(goalUnit);
   };
 
