@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {useRef, useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -63,7 +62,6 @@ const Title = ({goalUnitStr, handleGoalChange}) => {
           style={{
             ...styles.logoWrapper,
             backgroundColor: goalUnit.color,
-            // borderWidth: !goalUnit.color ? 1 : 0,
           }}>
           <MyImage imgName={goalUnit.logo} style={styles.logo} />
         </View>
@@ -71,7 +69,7 @@ const Title = ({goalUnitStr, handleGoalChange}) => {
       <TextInput
         style={styles.goalName}
         defaultValue={goalUnit.goalName}
-        placeholder={'Type here...'}
+        placeholder={'Name...'}
         blurOnSubmit={true}
         onSubmitEditing={event =>
           handleOnSubmitText(event.nativeEvent.TextInput)
@@ -103,13 +101,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   logoWrapper: {
-    // backgroundColor: 'black',
     borderRadius: 50,
     height: 70,
     padding: '4%',
     width: 70,
-    // borderStyle: 'dashed',
-    // borderColor: 'gray',
   },
   logo: {
     height: '150%',

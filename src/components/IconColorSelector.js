@@ -129,9 +129,13 @@ const IconColorSelector = ({
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}>
               {activeTab === 'logo' &&
-                iconNames.map(name => <ImageSelector imgName={name} />)}
+                iconNames.map(name => (
+                  <ImageSelector imgName={name} key={name} />
+                ))}
               {activeTab === 'color' &&
-                colorNames.map(name => <ColorSelector colorName={name} />)}
+                colorNames.map(name => (
+                  <ColorSelector colorName={name} key={name} />
+                ))}
             </ScrollView>
 
             <TouchableOpacity

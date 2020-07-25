@@ -145,11 +145,14 @@ const ActionsDescription = ({
       <>
         {goalUnit.actionsDescription.map(
           (action, i, actions) =>
-            i !== actions.length - 1 && <Action action={action} />,
+            i !== actions.length - 1 && (
+              <Action action={action} key={action.actionId} />
+            ),
         )}
         {length ? (
           <Action
             action={goalUnit.actionsDescription[length - 1]}
+            key={goalUnit.actionsDescription[length - 1].actionId}
             additionalRef={myInputFocus}
           />
         ) : null}

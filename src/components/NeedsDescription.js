@@ -145,11 +145,13 @@ const NeedsDescription = ({
     return (
       <>
         {goalUnit.needsDescription.simpleNeeds.map(
-          (need, i, needs) => i !== needs.length - 1 && <Need need={need} />,
+          (need, i, needs) =>
+            i !== needs.length - 1 && <Need need={need} key={need.needId} />,
         )}
         {length ? (
           <Need
             need={goalUnit.needsDescription.simpleNeeds[length - 1]}
+            key={goalUnit.needsDescription.simpleNeeds[length - 1].needId}
             additionalRef={myInputFocus}
           />
         ) : null}

@@ -7,6 +7,7 @@ import {
   BackHandler,
   Button,
 } from 'react-native';
+import {HeaderBackButton} from '@react-navigation/stack';
 
 import Title from '../components/Title';
 import WhatDescription from '../components/WhatDescription';
@@ -42,7 +43,50 @@ const Goal = ({route, navigation}) => {
       ]);
     };
 
+    const saveGoal = async () => {
+      if (goalUnit.goalName) {
+        await DB.saveGoal(goalUnit);
+
+        navigation.goBack();
+      } else {
+        Alert.alert('No name defined', 'Set name to save the goal!');
+      }
+    };
+
+    const backAction = () => {
+      if (defaultGoal !== JSON.stringify(goalUnit)) {
+        Alert.alert(
+          'Unsaved changes',
+          'Do you want to save changes before exit?',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => null,
+              style: 'cancel',
+            },
+            {
+              text: 'Discard',
+              onPress: () => navigation.goBack(),
+              style: 'destructive',
+            },
+            {text: 'YES', onPress: saveGoal},
+          ],
+        );
+      } else {
+        navigation.goBack();
+      }
+      return true;
+    };
+
     navigation.setOptions({
+      headerLeft: () => (
+        <HeaderBackButton
+          onPress={() => {
+            backAction();
+            // Do something
+          }}
+        />
+      ),
       headerRight: () => (
         <Button
           onPress={() => deleteAction(goalUnit)}
@@ -51,7 +95,7 @@ const Goal = ({route, navigation}) => {
         />
       ),
     });
-  }, [goalUnit, navigation]);
+  }, [defaultGoal, goalUnit, navigation]);
 
   const handleGoalChange = changedGoal => {
     setGoalUnit(changedGoal);
@@ -61,15 +105,12 @@ const Goal = ({route, navigation}) => {
 
   useEffect(() => {
     const saveGoal = async () => {
-      if (goalUnit.goalName && goalUnit.color) {
+      if (goalUnit.goalName) {
         await DB.saveGoal(goalUnit);
 
         navigation.goBack();
       } else {
-        Alert.alert(
-          'No name defined',
-          'Set "Name" and Color to save the goal!',
-        );
+        Alert.alert('No name defined', 'Set name to save the goal!');
       }
     };
 
