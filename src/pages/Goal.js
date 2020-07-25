@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect, useCallback} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -24,6 +24,45 @@ const Goal = ({route, navigation}) => {
   const [isAddedNeed, setIsAddedNeed] = useState(false);
   const [isAddedAction, setIsAddedAction] = useState(false);
 
+  const backTrigger = useCallback(() => {
+    const saveGoal = async () => {
+      if (goalUnit.goalName) {
+        await DB.saveGoal(goalUnit);
+
+        navigation.goBack();
+      } else {
+        Alert.alert('No name defined', 'Set name to save the goal!');
+      }
+    };
+
+    const backAction = () => {
+      if (defaultGoal !== JSON.stringify(goalUnit)) {
+        Alert.alert(
+          'Unsaved changes',
+          'Do you want to save changes before exit?',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => null,
+              style: 'cancel',
+            },
+            {
+              text: 'Discard',
+              onPress: () => navigation.goBack(),
+              style: 'destructive',
+            },
+            {text: 'YES', onPress: saveGoal},
+          ],
+        );
+      } else {
+        navigation.goBack();
+      }
+      return true;
+    };
+
+    return backAction();
+  }, [defaultGoal, goalUnit, navigation]);
+
   useLayoutEffect(() => {
     const deleteAction = goal => {
       Alert.alert('Delete', 'Are you sure you want to delete this goal?', [
@@ -43,50 +82,8 @@ const Goal = ({route, navigation}) => {
       ]);
     };
 
-    const saveGoal = async () => {
-      if (goalUnit.goalName) {
-        await DB.saveGoal(goalUnit);
-
-        navigation.goBack();
-      } else {
-        Alert.alert('No name defined', 'Set name to save the goal!');
-      }
-    };
-
-    const backAction = () => {
-      if (defaultGoal !== JSON.stringify(goalUnit)) {
-        Alert.alert(
-          'Unsaved changes',
-          'Do you want to save changes before exit?',
-          [
-            {
-              text: 'Cancel',
-              onPress: () => null,
-              style: 'cancel',
-            },
-            {
-              text: 'Discard',
-              onPress: () => navigation.goBack(),
-              style: 'destructive',
-            },
-            {text: 'YES', onPress: saveGoal},
-          ],
-        );
-      } else {
-        navigation.goBack();
-      }
-      return true;
-    };
-
     navigation.setOptions({
-      headerLeft: () => (
-        <HeaderBackButton
-          onPress={() => {
-            backAction();
-            // Do something
-          }}
-        />
-      ),
+      headerLeft: () => <HeaderBackButton onPress={() => backTrigger()} />,
       headerRight: () => (
         <Button
           onPress={() => deleteAction(goalUnit)}
@@ -95,7 +92,7 @@ const Goal = ({route, navigation}) => {
         />
       ),
     });
-  }, [defaultGoal, goalUnit, navigation]);
+  }, [backTrigger, defaultGoal, goalUnit, navigation]);
 
   const handleGoalChange = changedGoal => {
     setGoalUnit(changedGoal);
@@ -104,47 +101,12 @@ const Goal = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    const saveGoal = async () => {
-      if (goalUnit.goalName) {
-        await DB.saveGoal(goalUnit);
-
-        navigation.goBack();
-      } else {
-        Alert.alert('No name defined', 'Set name to save the goal!');
-      }
-    };
-
-    const backAction = () => {
-      if (defaultGoal !== JSON.stringify(goalUnit)) {
-        Alert.alert(
-          'Unsaved changes',
-          'Do you want to save changes before exit?',
-          [
-            {
-              text: 'Cancel',
-              onPress: () => null,
-              style: 'cancel',
-            },
-            {
-              text: 'Discard',
-              onPress: () => navigation.goBack(),
-              style: 'destructive',
-            },
-            {text: 'YES', onPress: saveGoal},
-          ],
-        );
-      } else {
-        navigation.goBack();
-      }
-      return true;
-    };
-
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction,
+      backTrigger,
     );
     return () => backHandler.remove();
-  }, [defaultGoal, goalUnit, navigation]);
+  }, [backTrigger, defaultGoal, goalUnit, navigation]);
 
   return (
     <View>
