@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  TouchableHighlight,
   Modal,
   ScrollView,
 } from 'react-native';
@@ -20,7 +21,7 @@ const IconColorSelector = ({
   handleOnSetIcon,
   handleOnSetColor,
 }) => {
-  const [activeTab, setActiveTab] = useState('color');
+  const [activeTab, setActiveTab] = useState('logo');
 
   const ImageSelector = ({imgName}) => {
     return (
@@ -33,6 +34,14 @@ const IconColorSelector = ({
             style={{
               ...styles.logoWrapper,
               backgroundColor: goalUnit.color || 'gray',
+              ...(goalUnit.logo === imgName && {
+                borderWidth: 1,
+                borderColor: 'gray',
+                height: 64,
+                width: 64,
+                marginLeft: 2,
+                elevation: 5,
+              }),
             }}>
             <MyImage imgName={imgName} style={styles.logo} />
           </View>
@@ -59,6 +68,14 @@ const IconColorSelector = ({
                     alignItems: 'center',
                   }
                 : {}),
+              ...(goalUnit.color === colorName && {
+                borderWidth: 1,
+                borderColor: 'gray',
+                height: 64,
+                width: 64,
+                marginLeft: 2,
+                elevation: 5,
+              }),
             }}>
             {!goalUnit.logo ? (
               <View
@@ -84,26 +101,27 @@ const IconColorSelector = ({
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.tabsWrap}>
-              <TouchableOpacity
-                style={{
-                  ...styles.colorTab,
-                  backgroundColor: activeTab === 'color' ? 'blue' : '#2196F3',
-                }}
-                onPress={() => {
-                  setActiveTab('color');
-                }}>
-                <Text style={styles.textStyle}>Color</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
+              <TouchableHighlight
                 style={{
                   ...styles.logoTab,
-                  backgroundColor: activeTab === 'logo' ? 'blue' : '#2196F3',
+                  backgroundColor: activeTab === 'logo' ? '#1a75bd' : '#2196F3',
                 }}
                 onPress={() => {
                   setActiveTab('logo');
                 }}>
                 <Text style={styles.textStyle}>Logo</Text>
-              </TouchableOpacity>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{
+                  ...styles.colorTab,
+                  backgroundColor:
+                    activeTab === 'color' ? '#1a75bd' : '#2196F3',
+                }}
+                onPress={() => {
+                  setActiveTab('color');
+                }}>
+                <Text style={styles.textStyle}>Color</Text>
+              </TouchableHighlight>
             </View>
 
             <ScrollView
@@ -164,12 +182,12 @@ const styles = StyleSheet.create({
   logoTab: {
     flexGrow: 1,
     padding: 10,
-    borderTopEndRadius: 20,
+    borderTopStartRadius: 20,
   },
   colorTab: {
     flexGrow: 1,
     padding: 10,
-    borderTopStartRadius: 20,
+    borderTopEndRadius: 20,
   },
   openButton: {
     backgroundColor: '#2196F3',
@@ -197,6 +215,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logoWrapper: {
     borderRadius: 50,

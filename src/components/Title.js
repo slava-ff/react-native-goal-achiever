@@ -63,7 +63,7 @@ const Title = ({goalUnitStr, handleGoalChange}) => {
           style={{
             ...styles.logoWrapper,
             backgroundColor: goalUnit.color,
-            borderWidth: !goalUnit.color ? 1 : 0,
+            // borderWidth: !goalUnit.color ? 1 : 0,
           }}>
           <MyImage imgName={goalUnit.logo} style={styles.logo} />
         </View>
@@ -103,14 +103,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   logoWrapper: {
-    backgroundColor: 'gray',
+    // backgroundColor: 'black',
     borderRadius: 50,
     height: 70,
     padding: '4%',
     width: 70,
-    // borderWidth: 1,
-    borderStyle: 'dashed',
-    borderColor: 'gray',
+    // borderStyle: 'dashed',
+    // borderColor: 'gray',
   },
   logo: {
     height: '150%',

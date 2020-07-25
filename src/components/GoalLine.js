@@ -69,9 +69,10 @@ const styles = StyleSheet.create({
     top: '-25%',
   },
   goalText: {
-    marginLeft: '5%',
+    marginLeft: '2%',
     color: 'black',
     padding: '4%',
+    width: '77%',
     fontSize: 24,
   },
   date: {
