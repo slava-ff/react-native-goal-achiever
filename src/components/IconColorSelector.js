@@ -24,73 +24,83 @@ const IconColorSelector = ({
   const [activeTab, setActiveTab] = useState('logo');
 
   const ImageSelector = ({imgName}) => {
+    const ImageContent = () => (
+      <View
+        style={{
+          ...styles.logoWrapper,
+          backgroundColor: goalUnit.color || 'gray',
+          ...(goalUnit.logo === imgName && {
+            borderWidth: 1,
+            borderColor: 'gray',
+            elevation: 5,
+          }),
+        }}>
+        <MyImage imgName={imgName} style={styles.logo} />
+      </View>
+    );
+
     return (
       <View style={{margin: 6}}>
-        <TouchableOpacity
-          onPress={() => {
-            handleOnSetIcon(imgName);
-          }}>
-          <View
-            style={{
-              ...styles.logoWrapper,
-              backgroundColor: goalUnit.color || 'gray',
-              ...(goalUnit.logo === imgName && {
-                borderWidth: 1,
-                borderColor: 'gray',
-                height: 64,
-                width: 64,
-                marginLeft: 2,
-                elevation: 5,
-              }),
+        {goalUnit.logo !== imgName ? (
+          <TouchableOpacity
+            onPress={() => {
+              handleOnSetIcon(imgName);
             }}>
-            <MyImage imgName={imgName} style={styles.logo} />
-          </View>
-        </TouchableOpacity>
+            <ImageContent />
+          </TouchableOpacity>
+        ) : (
+          <ImageContent />
+        )}
       </View>
     );
   };
 
   const ColorSelector = ({colorName}) => {
-    return (
-      <View style={{margin: 6}}>
-        <TouchableOpacity
-          onPress={() => {
-            handleOnSetColor(colorName);
-          }}>
+    const ColorContent = () => (
+      <View
+        style={{
+          ...styles.logoWrapper,
+          backgroundColor: colorName,
+          ...(!goalUnit.logo
+            ? {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }
+            : {}),
+          ...(goalUnit.color === colorName && {
+            borderWidth: 1,
+            borderColor: 'gray',
+            elevation: 5,
+          }),
+        }}>
+        {!goalUnit.logo ? (
           <View
             style={{
-              ...styles.logoWrapper,
-              backgroundColor: colorName,
-              ...(!goalUnit.logo
-                ? {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }
-                : {}),
-              ...(goalUnit.color === colorName && {
-                borderWidth: 1,
-                borderColor: 'gray',
-                height: 64,
-                width: 64,
-                marginLeft: 2,
-                elevation: 5,
-              }),
+              backgroundColor: 'white',
+              width: 20,
+              height: 20,
+              borderRadius: 20,
+            }}
+          />
+        ) : (
+          <MyImage imgName={goalUnit.logo} style={styles.logo} />
+        )}
+      </View>
+    );
+
+    return (
+      <View style={{margin: 6}}>
+        {goalUnit.color !== colorName ? (
+          <TouchableOpacity
+            onPress={() => {
+              handleOnSetColor(colorName);
             }}>
-            {!goalUnit.logo ? (
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  width: 20,
-                  height: 20,
-                  borderRadius: 20,
-                }}
-              />
-            ) : (
-              <MyImage imgName={goalUnit.logo} style={styles.logo} />
-            )}
-          </View>
-        </TouchableOpacity>
+            <ColorContent />
+          </TouchableOpacity>
+        ) : (
+          <ColorContent />
+        )}
       </View>
     );
   };
