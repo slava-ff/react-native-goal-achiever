@@ -6,9 +6,9 @@ import {
   Text,
   TouchableOpacity,
   TouchableHighlight,
-  Modal,
   ScrollView,
 } from 'react-native';
+import Modal from 'react-native-modal';
 
 import iconNames from '../assets/iconNames';
 import colorNames from '../helpers/color.helper';
@@ -106,8 +106,12 @@ const IconColorSelector = ({
   };
 
   return (
-    <View style={styles.centeredView}>
-      <Modal animationType="fade" transparent={true} visible={isVisible}>
+    <View style={styles.wrap}>
+      <Modal
+        // animationType="fade"
+        transparent={true}
+        isVisible={isVisible}
+        onBackdropPress={() => setIsModalVisible(false)}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.tabsWrap}>
@@ -148,13 +152,13 @@ const IconColorSelector = ({
                 ))}
             </ScrollView>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.openButton}
               onPress={() => {
                 setIsModalVisible(!isVisible);
               }}>
               <Text style={styles.textStyle}>Ok</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -163,14 +167,16 @@ const IconColorSelector = ({
 };
 
 const styles = StyleSheet.create({
+  wrap: {},
   centeredView: {
+    position: 'absolute',
     flex: 1,
+    top: 120,
+    // left: 20,
+    alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    top: 150,
-    left: 20,
-    width: '80%',
+    width: '90%',
   },
   modalView: {
     width: '100%',
@@ -203,14 +209,14 @@ const styles = StyleSheet.create({
     padding: 10,
     borderTopEndRadius: 20,
   },
-  openButton: {
-    backgroundColor: '#2196F3',
-    width: '100%',
-    borderBottomEndRadius: 20,
-    borderBottomStartRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
+  // openButton: {
+  //   backgroundColor: '#2196F3',
+  //   width: '100%',
+  //   borderBottomEndRadius: 20,
+  //   borderBottomStartRadius: 20,
+  //   padding: 10,
+  //   elevation: 2,
+  // },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
