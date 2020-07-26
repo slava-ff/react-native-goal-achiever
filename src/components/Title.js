@@ -28,7 +28,15 @@ const Title = ({goalUnitStr, handleGoalChange}) => {
   };
 
   const handleOnSubmitText = text => {
-    goalUnit.goalName = text;
+    let finalText;
+
+    if (text) {
+      finalText = text.trim();
+    } else {
+      finalText = text;
+    }
+
+    goalUnit.goalName = finalText;
 
     handleGoalChange(goalUnit);
   };

@@ -48,8 +48,10 @@ const NeedsDescription = ({
       need => need.needId === needIdToChange,
     );
 
-    if (text) {
-      goalUnit.needsDescription.simpleNeeds[indexToChange].needText = text;
+    if (text.trim()) {
+      goalUnit.needsDescription.simpleNeeds[
+        indexToChange
+      ].needText = text.trim();
     } else {
       goalUnit.needsDescription.simpleNeeds.splice(indexToChange, 1);
     }

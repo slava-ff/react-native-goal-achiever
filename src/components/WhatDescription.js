@@ -7,7 +7,15 @@ const WhatDescription = ({goalUnit, handleGoalChange}) => {
   const myInput = useRef();
 
   const handleOnSubmitText = text => {
-    goalUnit.whatDescription = text;
+    let finalText;
+
+    if (text) {
+      finalText = text.trim();
+    } else {
+      finalText = text;
+    }
+
+    goalUnit.whatDescription = finalText;
 
     handleGoalChange(goalUnit);
   };
@@ -30,7 +38,6 @@ const WhatDescription = ({goalUnit, handleGoalChange}) => {
       <TextInput
         multiline={true}
         placeholder={'Type here...'}
-        blurOnSubmit={true}
         style={styles.input}
         defaultValue={goalUnit.whatDescription}
         onSubmitEditing={event =>

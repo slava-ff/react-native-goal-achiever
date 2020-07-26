@@ -47,8 +47,8 @@ const ActionsDescription = ({
       action => action.actionId === actionIdToChange,
     );
 
-    if (text) {
-      goalUnit.actionsDescription[indexToChange].actionText = text;
+    if (text.trim()) {
+      goalUnit.actionsDescription[indexToChange].actionText = text.trim();
     } else {
       goalUnit.actionsDescription.splice(indexToChange, 1);
     }
