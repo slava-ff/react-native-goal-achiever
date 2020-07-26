@@ -176,7 +176,11 @@ const ActionsDescription = ({
   };
 
   return (
-    <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
+    <View
+      style={{
+        ...styles.wrapper,
+        borderColor: goalUnit.color === '#f2f2f2' ? 'darkgrey' : goalUnit.color,
+      }}>
       <Text style={styles.header}>4. What actions to take to achieve it?</Text>
       <Actions />
       {areAllActionsFilled() && <AddItem />}

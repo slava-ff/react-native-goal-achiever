@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useRef, useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -17,6 +18,10 @@ const Title = ({goalUnitStr, handleGoalChange}) => {
 
   const handleOnSetIcon = iconName => {
     goalUnit.logo = iconName;
+
+    if (goalUnit.color === '#f2f2f2') {
+      goalUnit.color = 'darkgrey';
+    }
 
     handleGoalChange(goalUnit);
   };
@@ -70,12 +75,17 @@ const Title = ({goalUnitStr, handleGoalChange}) => {
           style={{
             ...styles.logoWrapper,
             backgroundColor: goalUnit.color,
+            borderWidth: goalUnit.color === '#f2f2f2' && !goalUnit.logo ? 1 : 0,
           }}>
           <MyImage imgName={goalUnit.logo} style={styles.logo} />
         </View>
       </TouchableWithoutFeedback>
       <TextInput
-        style={styles.goalName}
+        style={{
+          ...styles.goalName,
+          borderColor:
+            goalUnit.color === '#f2f2f2' ? 'darkgrey' : goalUnit.color,
+        }}
         defaultValue={goalUnit.goalName}
         placeholder={'Name...'}
         blurOnSubmit={true}
@@ -110,6 +120,8 @@ const styles = StyleSheet.create({
   },
   logoWrapper: {
     borderRadius: 50,
+    borderStyle: 'dashed',
+    borderColor: 'darkgrey',
     height: 70,
     padding: '4%',
     width: 70,

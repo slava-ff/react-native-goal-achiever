@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useRef, useEffect} from 'react';
 import {StyleSheet, View, Text, TextInput, Keyboard} from 'react-native';
 
@@ -33,7 +34,11 @@ const WhyDescription = ({goalUnit, handleGoalChange}) => {
   }, []);
 
   return (
-    <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
+    <View
+      style={{
+        ...styles.wrapper,
+        borderColor: goalUnit.color === '#f2f2f2' ? 'darkgrey' : goalUnit.color,
+      }}>
       <Text style={styles.header}>2. Why do I want it?</Text>
       <TextInput
         multiline={true}

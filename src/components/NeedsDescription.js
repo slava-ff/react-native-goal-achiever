@@ -177,7 +177,11 @@ const NeedsDescription = ({
   };
 
   return (
-    <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
+    <View
+      style={{
+        ...styles.wrapper,
+        borderColor: goalUnit.color === '#f2f2f2' ? 'darkgrey' : goalUnit.color,
+      }}>
       <Text style={styles.header}>3. What do I need to achieve it?</Text>
       <Needs />
       {areAllNeedsFilled() && <AddItem />}

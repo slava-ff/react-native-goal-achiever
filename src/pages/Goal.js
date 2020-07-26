@@ -26,12 +26,22 @@ const Goal = ({route, navigation}) => {
 
   const backTrigger = useCallback(() => {
     const saveGoal = async () => {
-      if (goalUnit.goalName) {
+      if (!goalUnit.goalName && goalUnit.color === '#f2f2f2') {
+        Alert.alert(
+          'No name and color defined',
+          'Set name and color to save the goal!',
+        );
+      } else if (!goalUnit.goalName) {
+        Alert.alert('No name defined', 'Set name to save the goal!');
+      } else if (goalUnit.color === '#f2f2f2') {
+        Alert.alert(
+          'No color defined',
+          'Set color in the dashed circle to save the goal!',
+        );
+      } else {
         await DB.saveGoal(goalUnit);
 
         navigation.goBack();
-      } else {
-        Alert.alert('No name defined', 'Set name to save the goal!');
       }
     };
 

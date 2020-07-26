@@ -28,7 +28,8 @@ const IconColorSelector = ({
       <View
         style={{
           ...styles.logoWrapper,
-          backgroundColor: goalUnit.color || 'gray',
+          backgroundColor:
+            goalUnit.color === '#f2f2f2' ? 'darkgrey' : goalUnit.color,
           ...(goalUnit.logo === imgName && {
             borderWidth: 1,
             borderColor: 'gray',
@@ -108,7 +109,6 @@ const IconColorSelector = ({
   return (
     <View style={styles.wrap}>
       <Modal
-        // animationType="fade"
         transparent={true}
         isVisible={isVisible}
         onBackdropPress={() => setIsModalVisible(false)}>
@@ -151,14 +151,6 @@ const IconColorSelector = ({
                   <ColorSelector colorName={name} key={name} />
                 ))}
             </ScrollView>
-
-            {/* <TouchableOpacity
-              style={styles.openButton}
-              onPress={() => {
-                setIsModalVisible(!isVisible);
-              }}>
-              <Text style={styles.textStyle}>Ok</Text>
-            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -172,7 +164,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flex: 1,
     top: 120,
-    // left: 20,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -209,14 +200,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderTopEndRadius: 20,
   },
-  // openButton: {
-  //   backgroundColor: '#2196F3',
-  //   width: '100%',
-  //   borderBottomEndRadius: 20,
-  //   borderBottomStartRadius: 20,
-  //   padding: 10,
-  //   elevation: 2,
-  // },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
   StyleSheet,
@@ -34,7 +35,11 @@ export default ({goalUnit, handleGoalChange}) => {
   };
 
   return (
-    <View style={{...styles.wrapper, borderColor: goalUnit.color}}>
+    <View
+      style={{
+        ...styles.wrapper,
+        borderColor: goalUnit.color === '#f2f2f2' ? 'darkgrey' : goalUnit.color,
+      }}>
       <Text style={styles.header}>5. When it should be achieved?</Text>
       <View>
         <TouchableOpacity style={styles.dateWrapper} onPress={showDatepicker}>
