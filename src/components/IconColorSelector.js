@@ -111,6 +111,8 @@ const IconColorSelector = ({
       <Modal
         transparent={true}
         isVisible={isVisible}
+        hideModalContentWhileAnimating={true}
+        onBackButtonPress={() => setIsModalVisible(false)}
         onBackdropPress={() => setIsModalVisible(false)}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
