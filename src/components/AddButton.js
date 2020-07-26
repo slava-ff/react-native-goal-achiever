@@ -27,10 +27,8 @@ const styles = StyleSheet.create({
     zIndex: 2,
     backgroundColor: 'white',
     position: 'absolute',
-    bottom: 30,
-    right: 50,
-    width: 80,
-    height: 80,
+    bottom: 40,
+    right: 40,
     borderRadius: 50,
   },
   round: {

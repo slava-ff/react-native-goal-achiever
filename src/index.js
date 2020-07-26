@@ -14,7 +14,7 @@ const App = () => {
       <Stack.Navigator initialRouteName="TopLevelGoals">
         <Stack.Screen
           name="TopLevelGoals"
-          options={{title: 'Top level goals'}}
+          options={{title: 'Goals'}}
           component={TopLevelGoals}
         />
         <Stack.Screen
