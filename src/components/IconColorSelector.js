@@ -31,8 +31,6 @@ const IconColorSelector = ({
           backgroundColor:
             goalUnit.color === '#f2f2f2' ? 'darkgrey' : goalUnit.color,
           ...(goalUnit.logo === imgName && {
-            borderWidth: 1,
-            borderColor: 'gray',
             elevation: 5,
           }),
         }}>
@@ -70,8 +68,6 @@ const IconColorSelector = ({
               }
             : {}),
           ...(goalUnit.color === colorName && {
-            borderWidth: 1,
-            borderColor: 'gray',
             elevation: 5,
           }),
         }}>
@@ -227,8 +223,8 @@ const styles = StyleSheet.create({
   logoWrapper: {
     borderRadius: 50,
     height: 70,
-    padding: '14%',
     width: 70,
+    padding: '14%',
   },
   logo: {
     height: '150%',
