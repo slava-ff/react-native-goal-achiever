@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
 
 import GoalFlatList from '../components/GoalFlatList';
 import AddButton from '../components/AddButton';
@@ -20,21 +19,10 @@ const TopLevelGoals = ({navigation}) => {
 
   return (
     <>
-      {goals && (
-        <GoalFlatList
-          goalsTemp={goals}
-          navigation={navigation}
-          style={styles.flatList}
-        />
-      )}
-      <AddButton style={styles.btn} navigation={navigation} />
+      {goals && <GoalFlatList goalsTemp={goals} navigation={navigation} />}
+      <AddButton navigation={navigation} />
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  flatList: {},
-  btn: {},
-});
 
 export default TopLevelGoals;

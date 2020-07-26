@@ -74,7 +74,7 @@ const Goal = ({route, navigation}) => {
         {
           text: 'Delete',
           onPress: async () => {
-            await DB.delete(goal);
+            goal._id && (await DB.delete(goal));
             navigation.goBack();
           },
           style: 'destructive',
